@@ -1,7 +1,6 @@
 const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
-//Cross-Origin Resource Sharing, 서버와 클라의 통신을 위한 모듈
 // const cors = require("cors");
 const app = express();
 
@@ -74,7 +73,8 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "UPDATE announcement SET subject = ?, content = ?, updateDate = now() WHERE idx = ?"
+    let sql =
+      "UPDATE announcement SET subject = ?, content = ?, updateDate = now() WHERE idx = ?";
     let subject = req.body.subject;
     let content = req.body.content;
     let id = req.params.id;
@@ -83,4 +83,18 @@ exports.update = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+/* -----공지사항 게시글 GET----- */
+exports.detail = async (req, res) => {
+  try {
+    const connection = await getConnection();
+    let sql =
+      "SELECT * FROM announcement WHERE isDeleted = 0 AND config_idx = 1 AND idx = ?";
+    let idx = req.params.id;
+    let [rows, fields] = await connection.query(sql, idx);
+    res.send(rows);
+  } catch (error) {
+    console.log(error);
+  }
+};

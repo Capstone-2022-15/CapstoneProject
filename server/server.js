@@ -10,6 +10,7 @@ const announcement = require("./announcement");
 
 /* -----공지사항----- */
 server.get("/api/announcement", announcement.show);
+server.get("/api/announcement/:id", announcement.detail);
 server.post("/api/announcement", function (req, res) {
   announcement.create;
 });
@@ -17,7 +18,6 @@ server.delete("/api/announcement/:id", announcement.delete);
 server.post("/api/announcement/:id", function (req, res) {
   announcement.update;
 });
-
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);

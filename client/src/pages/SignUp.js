@@ -1,5 +1,5 @@
 import React from "react";
-import InputBox from "../components/comp-InputBox";
+import InputBox from "../components/InputBoxDom";
 
 function SignUp() {
   return (

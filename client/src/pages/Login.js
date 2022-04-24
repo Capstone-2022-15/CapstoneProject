@@ -1,26 +1,33 @@
-import React, { useState, useRef } from "react";
-import InputBox from "../components/comp-InputBox";
-import Modal from "../components/Modal";
+import React, { useState } from "react";
+import InputBox from "../components/InputBoxDom";
+import ModalDom from "../components/ModalDom";
 import { Link } from "react-router-dom";
 
 function Login() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOn, setIsModalOn] = useState(false);
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsModalOn(true);
   };
   const closeModal = () => {
-    if (isModalOpen === true) return setIsModalOpen(false);
+    setIsModalOn(false);
   };
 
   return (
-    <div onClick={closeModal}>
+    <div className="App">
       <h1>로그인 페이지</h1>
-      <InputBox name="ID" id="id" type="text" />
-      <InputBox name="Password" id="pw" type="text" />
-      <button>로그인</button>
-      <button onClick={openModal}>비밀번호 찾기</button>
-      {isModalOpen && <Modal message="modal"></Modal>}
+      <div>
+        <button className="loginBtn" onClick={openModal}>
+          로그인
+        </button>
+        {isModalOn && (
+          <ModalDom
+            isModalDimmer={isModalOn ? openModal : closeModal}
+            handleModal={closeModal}
+          />
+        )}
+      </div>
+      <button>비밀번호 찾기</button>
       <button>회원가입</button>
     </div>
   );

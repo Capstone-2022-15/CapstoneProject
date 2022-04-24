@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../css/InputBox.module.css";
+import "../css/InputBoxDom.module.css";
 
 function InputBox({ name, id, type }) {
   return (

@@ -1,11 +1,11 @@
 import React from "react";
-import Header from "../components/comp-Header";
+import Header from "../components/HeaderDom";
 
 function Department() {
   return (
     <>
       <Header />
-      <div>캘린더 페이지</div>
+      <div>장학정보 페이지</div>
     </>
   );
 }

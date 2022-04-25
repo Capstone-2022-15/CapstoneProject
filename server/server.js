@@ -8,6 +8,7 @@ server.use(cors());
 /* -----MODELS----- */
 const announcement = require("./models/announcement");
 const degree = require("./models/degree");
+const scholarship = require("./models/scholarship");
 
 /* -----공지사항----- */
 server.get("/api/announcement", announcement.show);
@@ -29,6 +30,17 @@ server.post("/api/degree", function (req, res) {
 server.delete("/api/degree/:id", degree.delete);
 server.post("/api/degree/:id", function (req, res) {
   degree.update;
+});
+
+/* -----장학정보----- */
+server.get("/api/scholarship", scholarship.show);
+server.get("/api/scholarship/:id", scholarship.detail);
+server.post("/api/scholarship", function (req, res) {
+  scholarship.create;
+});
+server.delete("/api/scholarship/:id", scholarship.delete);
+server.post("/api/scholarship/:id", function (req, res) {
+  scholarship.update;
 });
 
 server.listen(port, () => {

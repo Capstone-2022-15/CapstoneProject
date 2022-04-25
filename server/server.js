@@ -5,8 +5,9 @@ const port = process.env.PORT || 3030;
 const server = express();
 server.use(cors());
 
-//공지사항 모듈
-const announcement = require("./announcement");
+/* -----MODELS----- */
+const announcement = require("./models/announcement");
+const degree = require("./models/degree");
 
 /* -----공지사항----- */
 server.get("/api/announcement", announcement.show);
@@ -17,6 +18,17 @@ server.post("/api/announcement", function (req, res) {
 server.delete("/api/announcement/:id", announcement.delete);
 server.post("/api/announcement/:id", function (req, res) {
   announcement.update;
+});
+
+/* -----학사일정----- */
+server.get("/api/degree", degree.show);
+server.get("/api/degree/:id", degree.detail);
+server.post("/api/degree", function (req, res) {
+  degree.create;
+});
+server.delete("/api/degree/:id", degree.delete);
+server.post("/api/degree/:id", function (req, res) {
+  degree.update;
 });
 
 server.listen(port, () => {

@@ -40,7 +40,7 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "INSERT INTO CUSTOMER VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
+    let sql = "INSERT INTO announcement VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
     let config_idx = 1;
     let subject = req.body.subject;
     let content = req.body.content;

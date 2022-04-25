@@ -1,11 +1,5 @@
 const fs = require("fs");
-const express = require("express");
-const bodyParser = require("body-parser");
 // const cors = require("cors");
-const app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(cors());
 
 const data = fs.readFileSync("./database.json");
@@ -28,7 +22,6 @@ exports.show = async (req, res) => {
     const connection = await getConnection();
     let sql =
       "SELECT * FROM announcement WHERE isDeleted = 0 AND config_idx = 1";
-    // let config_idx = req.body.config_idx;
     let [rows, fields] = await connection.query(sql);
     res.send(rows);
   } catch (error) {
@@ -48,9 +41,8 @@ exports.create = async (req, res) => {
     let writer_nick = req.body.writer_nick;
     let password = req.body.password;
     let params = [config_idx, subject, content, writer, writer_nick, password];
-    await connection.query(sql, params, (error, rows, fields) => {
-      res.send(rows);
-    });
+    await connection.query(sql, params);
+    res.status(201).send({ status: "201" });
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +55,8 @@ exports.delete = async (req, res) => {
     // console.log(req.params.id);
     let sql = "UPDATE announcement SET isDeleted = 1 WHERE idx = ?";
     let params = [req.params.id];
-    connection.query(sql, params);
+    await connection.query(sql, params);
+    res.status(200).send({ status: "200" });
   } catch (error) {
     console.log(error);
   }
@@ -79,7 +72,8 @@ exports.update = async (req, res) => {
     let content = req.body.content;
     let id = req.params.id;
     let params = [subject, content, id];
-    connection.query(sql, params);
+    await connection.query(sql, params);
+    res.status(200).send({ status: "200" });
   } catch (error) {
     console.log(error);
   }
@@ -90,7 +84,7 @@ exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
     let sql =
-      "SELECT * FROM announcement WHERE isDeleted = 0 AND config_idx = 1 AND idx = ?";
+      "SELECT * FROM announcement WHERE isDeleted = 0 AND idx = ?";
     let idx = req.params.id;
     let [rows, fields] = await connection.query(sql, idx);
     res.send(rows);

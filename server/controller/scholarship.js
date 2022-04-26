@@ -23,9 +23,14 @@ exports.show = async (req, res) => {
     let sql =
       "SELECT * FROM scholarship WHERE isDeleted = 0 AND config_idx = 3"; // 설정
     let [rows, fields] = await connection.query(sql);
-    res.send(rows);
+    if (rows[0]) {
+      res.status(200).json({ status: "200", data: rows });
+    } else {
+      res.status(200).json({ status: "200", data: rows });
+    }
   } catch (error) {
     console.log(error);
+    res.status(400).json({ status: "400", message: error.message });
   }
 };
 
@@ -33,7 +38,8 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "INSERT INTO scholarship VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
+    let sql =
+      "INSERT INTO scholarship VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
     let config_idx = 3; // 설정
     let subject = req.body.subject;
     let content = req.body.content;
@@ -41,10 +47,19 @@ exports.create = async (req, res) => {
     let writer_nick = req.body.writer_nick;
     let password = req.body.password;
     let params = [config_idx, subject, content, writer, writer_nick, password];
-    await connection.query(sql, params);
-    res.status(201).send({ status: "201" });
+    let [rows, field] = await connection.query(sql, params);
+    if (rows.affectedRows == 1) {
+      res.status(204).json();
+    } else if (rows.affectedRows > 1) {
+      res
+        .status(409)
+        .json({ status: "409", message: "Posted more than expect" });
+    } else {
+      res.status(400).json({ status: "400", message: "Post fail" });
+    }
   } catch (error) {
     console.log(error);
+    res.status(400).json({ status: "400", message: error.message });
   }
 };
 
@@ -55,10 +70,15 @@ exports.delete = async (req, res) => {
     // console.log(req.params.id);
     let sql = "UPDATE scholarship SET isDeleted = 1 WHERE idx = ?";
     let params = [req.params.id];
-    await connection.query(sql, params);
-    res.status(200).send({ status: "200" });
+    let [rows, field] = await connection.query(sql, params);
+    if (rows.changedRows > 0) {
+      res.status(204).send();
+    } else {
+      res.status(400).json({ status: "400", message: "Not matched id" });
+    }
   } catch (error) {
     console.log(error);
+    res.status(400).json({ status: "400", message: error.message });
   }
 };
 
@@ -67,15 +87,20 @@ exports.update = async (req, res) => {
   try {
     const connection = await getConnection();
     let sql =
-      "UPDATE scholarship SET subject = ?, content = ?, updateDate = now() WHERE idx = ?";
+      "UPDATE scholarship SET subject = ?, content = ?, updateDate = now() WHERE idx = ? AND isDeleted = 0";
     let subject = req.body.subject;
     let content = req.body.content;
     let id = req.params.id;
     let params = [subject, content, id];
-    await connection.query(sql, params);
-    res.status(200).send({ status: "200" });
+    let [rows, field] = await connection.query(sql, params);
+    if (rows.changedRows > 0) {
+      res.status(204).json();
+    } else {
+      res.status(400).json({ status: "400", message: "Not matched id" });
+    }
   } catch (error) {
     console.log(error);
+    res.status(400).json({ status: "400", message: error.message });
   }
 };
 
@@ -83,12 +108,16 @@ exports.update = async (req, res) => {
 exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql =
-      "SELECT * FROM scholarship WHERE isDeleted = 0 AND idx = ?";
-    let idx = req.params.id;
-    let [rows, fields] = await connection.query(sql, idx);
-    res.send(rows);
+    let sql = "SELECT * FROM scholarship WHERE isDeleted = 0 AND idx = ?";
+    let id = req.params.id;
+    let [rows, fields] = await connection.query(sql, id);
+    if (rows[0]) {
+      res.status(200).json({ status: "200", data: rows });
+    } else {
+      res.status(400).json({ status: "400", message: "Not matched id" });
+    }
   } catch (error) {
     console.log(error);
+    res.status(400).json({ status: "400", message: error.message });
   }
 };

@@ -8,7 +8,7 @@ server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
-/* -----MODELS----- */
+/* -----Controller----- */
 const announcement = require("./controller/announcement");
 const degree = require("./controller/degree");
 const scholarship = require("./controller/scholarship");

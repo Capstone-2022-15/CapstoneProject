@@ -15,19 +15,21 @@ function Login() {
   };
 
   return (
-    <div className="App">
-      <div className="title">로그인 페이지</div>
-      <button className="loginBtn" onClick={openModal}>
-        로그인
-      </button>
-      {isModalOn && (
-        <ModalDom
-          isModalDimmer={isModalOn ? openModal : closeModal}
-          handleModal={closeModal}
-        />
-      )}
-      <button>비밀번호 찾기</button>
-      <button>회원가입</button>
+    <div className="AppDimmer">
+      <div className="App">
+        <div className="title">로그인 페이지</div>
+        <button className="loginBtn" onClick={openModal}>
+          로그인
+        </button>
+        {isModalOn && (
+          <ModalDom
+            isModalDimmer={isModalOn ? openModal : closeModal}
+            handleModal={closeModal}
+          />
+        )}
+        <button>비밀번호 찾기</button>
+        <button>회원가입</button>
+      </div>
     </div>
   );
 }

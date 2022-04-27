@@ -1,6 +1,7 @@
 const express = require("express");
 //Cross-Origin Resource Sharing, 서버와 클라의 통신을 위한 모듈
 const cors = require("cors");
+const host = "0.0.0.0"
 const port = process.env.PORT || 3030;
 const bodyParser = require("body-parser");
 const server = express();
@@ -58,6 +59,6 @@ server.post("/api/community/:id", function (req, res) {
   community.update(req, res);
 });
 
-server.listen(port, () => {
+server.listen(port, host, () => {
   console.log(`Listening on port ${port}`);
 });

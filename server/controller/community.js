@@ -37,7 +37,7 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "INSERT INTO community VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
+    let sql = "INSERT INTO community VALUES (null,?,?,?,?,?,now(),now(),0,?,0,0)";
     let config_idx = 4; // 설정
     let subject = req.body.subject;
     let content = req.body.content;

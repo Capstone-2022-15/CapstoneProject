@@ -21,7 +21,7 @@ exports.show = async (req, res) => {
   try {
     const connection = await getConnection();
     let sql =
-      "SELECT * FROM announcement WHERE isDeleted = 0 AND config_idx = 1";
+      "SELECT * FROM announcement WHERE isDeleted = 0";
     let [rows, fields] = await connection.query(sql);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
@@ -39,7 +39,7 @@ exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
     let sql =
-      "INSERT INTO announcement VALUES (null,?,?,?,?,?,now(),now(),0,?,0)";
+      "INSERT INTO announcement VALUES (null,?,?,?,?,?,now(),now(),0,?,0,0)";
     let config_idx = 1;
     let subject = req.body.subject;
     let content = req.body.content;

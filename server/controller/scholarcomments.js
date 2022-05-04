@@ -14,7 +14,7 @@ const getConnection = async () => {
   return connection;
 };
 
-/* -----학사정보 댓글 전체 GET----- */
+/* -----장학정보 댓글 전체 GET----- */
 exports.show = async (req, res) => {
   try {
     const connection = await getConnection();
@@ -33,7 +33,7 @@ exports.show = async (req, res) => {
   }
 };
 
-/* -----학사정보 댓글 POST----- */
+/* -----장학정보 댓글 POST----- */
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
@@ -69,7 +69,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* -----학사정보 댓글 DELETE----- */
+/* -----장학정보 댓글 DELETE----- */
 exports.delete = async (req, res) => {
   try {
     const connection = await getConnection();
@@ -99,7 +99,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-/* -----학사정보 댓글 UPDATE(POST w/ id)----- */
+/* -----장학정보 댓글 UPDATE(POST w/ id)----- */
 exports.update = async (req, res) => {
   try {
     const connection = await getConnection();

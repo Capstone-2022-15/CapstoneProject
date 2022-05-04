@@ -20,7 +20,7 @@ const getConnection = async () => {
 exports.show = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "SELECT * FROM announcement WHERE isDeleted = 0";
+    let sql = "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply FROM announcement as A WHERE A.isDeleted = 0";
     let [rows, fields] = await connection.query(sql);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
@@ -107,7 +107,7 @@ exports.update = async (req, res) => {
 exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "SELECT * FROM announcement WHERE isDeleted = 0 AND idx = ?";
+    let sql = "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply, A.password FROM announcement as A WHERE A.isDeleted = 0 AND A.idx = ?";
     let id = req.params.id;
     let [rows, fields] = await connection.query(sql, id);
     if (rows[0]) {
@@ -120,11 +120,3 @@ exports.detail = async (req, res) => {
     res.status(400).json({ status: "400", message: error.message });
   }
 };
-
-/*
-해당 아이디인 게시글의 댓글 갯수를 게시글의 댓글수 컬럼에 업데이트 하는 sql문 (서브루틴 사용)
-
-UPDATE announcement as A
-set A.reply = (SELECT COUNT(*) FROM announcementComments as C WHERE C.ref = A.idx)
-WHERE A.idx = ?;
-*/

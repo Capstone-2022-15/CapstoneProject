@@ -20,7 +20,7 @@ const getConnection = async () => {
 exports.show = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "SELECT * FROM degree WHERE isDeleted = 0 AND config_idx = 2"; // 설정
+    let sql = "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply FROM degree as A WHERE A.isDeleted = 0"; // 설정
     let [rows, fields] = await connection.query(sql);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
@@ -106,7 +106,7 @@ exports.update = async (req, res) => {
 exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "SELECT * FROM degree WHERE isDeleted = 0 AND idx = ?";
+    let sql = "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply, A.password FROM degree as A WHERE A.isDeleted = 0 AND A.idx = ?";
     let id = req.params.id;
     let [rows, fields] = await connection.query(sql, id);
     if (rows[0]) {

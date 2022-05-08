@@ -36,7 +36,7 @@ const StyledLink = styled(Link)`
   -webkit-box-sizing: border-box;
   color: #ffffff;
   text-align: center;
-  padding: 10px 33px;
+  padding: 0px 33px;
   text-decoration-line: none;
   &:hover {
     color: #000000;

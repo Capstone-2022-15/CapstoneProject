@@ -1,0 +1,50 @@
+.modalDimmer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #00000080;
+  z-index: 10000;
+}
+.modalContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 375px;
+  height: 620px;
+  background: white;
+  animation: modal-show 0.3s;
+}
+.modalContainer button {
+  position: absolute;
+  top: 0%;
+  left: 100%;
+  transform: translate(-100%, 20%);
+  background-color: transparent;
+  border: none;
+}
+.modalContainer .mui {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.modalContainer .mui Button {
+  position: absolute;
+  top: 150%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes modal-show {
+  from {
+    opacity: 0;
+    margin-top: -50px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}

@@ -62,7 +62,8 @@ exports.create = async (req, res) => {
     } else {
       res.status(400).json({ status: "400", message: "Post fail" });
     }
-  } catch (error) {
+  }
+     catch (error) {
     console.log(error);
     res.status(400).json({ status: "400", message: error.message });
   }
@@ -119,7 +120,7 @@ exports.detail = async (req, res) => {
     const [rows, fields] = await connection.query(sql, id);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
-      sql =
+      const sql =
         "UPDATE announcement as A set A.hit = IFNULL(hit, 0) + 1 WHERE A.idx = ?";
       await connection.query(sql, id);
     } else {

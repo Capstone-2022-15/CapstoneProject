@@ -7,7 +7,7 @@ const conf = JSON.parse(data);
 const mysql = require("mysql2/promise");
 
 const getConnection = async () => {
-  let connection = await mysql.createConnection({
+  const connection = await mysql.createConnection({
     host: conf.host,
     user: conf.user,
     password: conf.password,
@@ -20,9 +20,9 @@ const getConnection = async () => {
 exports.show = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql =
+    const sql =
       "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply FROM scholarship as A WHERE A.isDeleted = 0"; // 설정
-    let [rows, fields] = await connection.query(sql);
+    const [rows, fields] = await connection.query(sql);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
     } else {
@@ -38,16 +38,23 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql =
+    const sql =
       "INSERT INTO scholarship VALUES (null,?,?,?,?,?,now(),now(),0,?,0,0)";
-    let config_idx = 3; // 설정
-    let subject = req.body.subject;
-    let content = req.body.content;
-    let writer = req.body.writer;
-    let writer_nick = req.body.writer_nick;
-    let password = req.body.password;
-    let params = [config_idx, subject, content, writer, writer_nick, password];
-    let [rows, field] = await connection.query(sql, params);
+    const config_idx = 3; // 설정
+    const subject = req.body.subject;
+    const content = req.body.content;
+    const writer = req.body.writer;
+    const writer_nick = req.body.writer_nick;
+    const password = req.body.password;
+    const params = [
+      config_idx,
+      subject,
+      content,
+      writer,
+      writer_nick,
+      password,
+    ];
+    const [rows, field] = await connection.query(sql, params);
     if (rows.affectedRows == 1) {
       res.status(204).json();
     } else if (rows.affectedRows > 1) {
@@ -68,9 +75,9 @@ exports.delete = async (req, res) => {
   try {
     const connection = await getConnection();
     // console.log(req.params.id);
-    let sql = "UPDATE scholarship SET isDeleted = 1 WHERE idx = ?";
-    let params = [req.params.id];
-    let [rows, field] = await connection.query(sql, params);
+    const sql = "UPDATE scholarship SET isDeleted = 1 WHERE idx = ?";
+    const params = [req.params.id];
+    const [rows, field] = await connection.query(sql, params);
     if (rows.changedRows > 0) {
       res.status(204).send();
     } else {
@@ -86,13 +93,13 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql =
+    const sql =
       "UPDATE scholarship SET subject = ?, content = ?, updateDate = now() WHERE idx = ? AND isDeleted = 0";
-    let subject = req.body.subject;
-    let content = req.body.content;
-    let id = req.params.id;
-    let params = [subject, content, id];
-    let [rows, field] = await connection.query(sql, params);
+    const subject = req.body.subject;
+    const content = req.body.content;
+    const id = req.params.id;
+    const params = [subject, content, id];
+    const [rows, field] = await connection.query(sql, params);
     if (rows.changedRows > 0) {
       res.status(204).json();
     } else {
@@ -108,11 +115,15 @@ exports.update = async (req, res) => {
 exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
-    let sql = "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply, A.password FROM scholarship as A WHERE A.isDeleted = 0 AND A.idx = ?";
-    let id = req.params.id;
-    let [rows, fields] = await connection.query(sql, id);
+    const sql =
+      "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply, A.password FROM scholarship as A WHERE A.isDeleted = 0 AND A.idx = ?";
+    const id = req.params.id;
+    const [rows, fields] = await connection.query(sql, id);
     if (rows[0]) {
       res.status(200).json({ status: "200", data: rows });
+      sql =
+        "UPDATE scholarship as A set A.hit = IFNULL(hit, 0) + 1 WHERE A.idx = ?";
+      await connection.query(sql, id);
     } else {
       res.status(400).json({ status: "400", message: "Not matched id" });
     }

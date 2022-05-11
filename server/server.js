@@ -1,6 +1,8 @@
 const express = require("express");
-//Cross-Origin Resource Sharing, 서버와 클라의 통신을 위한 모듈
+//Cross-Origin Resource Sharing : 다중 서버 접속
 const cors = require("cors");
+// const multer = require("multer");
+
 const host = "0.0.0.0";
 const port = process.env.PORT || 3030;
 const bodyParser = require("body-parser");
@@ -32,7 +34,10 @@ server.post("/api/announcement/:id", function (req, res) {
 
 server.get("/api/announcement/:id/comments", announcementComments.show);
 server.post("/api/announcement/:id/comments", announcementComments.create);
-server.delete("/api/announcement/:id/comments/:idx", announcementComments.delete);
+server.delete(
+  "/api/announcement/:id/comments/:idx",
+  announcementComments.delete
+);
 server.post("/api/announcement/:id/comments/:idx", announcementComments.update);
 
 /* -----학사일정----- */

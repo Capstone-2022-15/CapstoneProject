@@ -20,7 +20,13 @@ const scholarship = require("./controller/scholarship");
 const scholarshipComments = require("./controller/scholarcomments");
 const community = require("./controller/community");
 const communityComments = require("./controller/communitycomments");
+/* -----Auth----- */
+const token = require("./auth/token");
 
+/* -----사용자 인증----- */
+server.post("/api/login", function (req, res) {
+  token.getToken(req, res);
+});
 /* -----공지사항----- */
 server.get("/api/announcement", announcement.show);
 server.get("/api/announcement/:id", announcement.detail);

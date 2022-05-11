@@ -25,6 +25,7 @@ function Login() {
           <ModalDom
             isModalDimmer={isModalOn ? openModal : closeModal}
             handleModal={closeModal}
+            link="/main"
           />
         )}
         <button>비밀번호 찾기</button>

@@ -9,10 +9,16 @@ function HeaderDom() {
       <nav>
         <ul>
           <li>
-            <StyledLink to={`/calendar`}>캘린더</StyledLink>
+            <StyledLink to={`/main`}>제목</StyledLink>
           </li>
           <li>
-            <StyledLink to={`/department`}>장학정보</StyledLink>
+            <StyledLink to={`/announcement`}>공지사항</StyledLink>
+          </li>
+          <li>
+            <StyledLink to={`/degree`}>학사정보</StyledLink>
+          </li>
+          <li>
+            <StyledLink to={`/scholarship`}>장학정보</StyledLink>
           </li>
           <li>
             <StyledLink to={`/community`}>커뮤니티</StyledLink>

@@ -9,7 +9,7 @@ import React, { useEffect, useState, useRef } from "react";
 // } from "react-virtualized";
 import Header from "../components/HeaderDom";
 
-function Department() {
+function Degree() {
   return (
     <>
       <Header />
@@ -18,4 +18,4 @@ function Department() {
   );
 }
 
-export default Department;
+export default Degree;

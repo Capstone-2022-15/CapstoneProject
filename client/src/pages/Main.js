@@ -6,7 +6,7 @@ import Header from "../components/HeaderDom";
 import previous from "../img/bi_arrow-left-square-fill.png";
 import next from "../img/bi_arrow-right-square-fill.png";
 
-function Calendar() {
+function Main() {
   //   const dayjs = require("dayjs");
   //   const weekday = require("dayjs/plugin/weekday");
   //   const isoWeek = require("dayjs/plugin/isoWeek");
@@ -138,7 +138,7 @@ function Calendar() {
   );
 }
 
-export default Calendar;
+export default Main;
 
 // const StyledHeader = styled.div`
 //   display: flex;

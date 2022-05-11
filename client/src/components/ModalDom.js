@@ -1,11 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import icon from "../img/Button-X.png"; // 이미지 직접 루트 말고 임포트해서 건네기
 import "../css/ModalDom.css";
 
-function ModalDom({ isModalDimmer, handleModal }) {
+function ModalDom({ isModalDimmer, handleModal, link }) {
   return (
     <div className="modalDimmer" onClick={isModalDimmer}>
       <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
@@ -29,7 +31,9 @@ function ModalDom({ isModalDimmer, handleModal }) {
             />
           </Box>
           <Button variant="outlined" color="secondary">
-            로그인
+            <Link to={link} className="link">
+              로그인
+            </Link>
           </Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
+const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const jwt = require('jsonwebtoken');
 const authkey = fs.readFileSync("./auth.json");
 const { secret } = JSON.parse(authkey);
 const SECRET_KEY = process.env.JWT_SECRET || secret;

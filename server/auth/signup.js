@@ -1,8 +1,8 @@
 const fs = require("fs");
+const mysql = require("mysql2/promise");
 
 const data = fs.readFileSync("./database.json");
 const conf = JSON.parse(data);
-const mysql = require("mysql2/promise");
 
 const getConnection = async () => {
   const connection = await mysql.createConnection({
@@ -27,7 +27,7 @@ exports.signup = async (req, res) => {
     let [rows, fields] = await connection.query(sql, id); // 1이면 존재함, 0이면 없음
     if ((rows[0].isThere == 0)) {
       //회원가입 진행
-      sql = "INSERT INTO member VALUES (null,?,?,?,?,?,0,now(),null,0)";
+      sql = "INSERT INTO member VALUES (null,?,?,?,?,?,0,now(),null,0,null)";
       const params = [id, password, name, nick, gender];
       [rows, fields] = await connection.query(sql, params);
       if (rows.affectedRows == 1) {

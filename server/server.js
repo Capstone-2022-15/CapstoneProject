@@ -2,6 +2,7 @@ const express = require("express");
 //Cross-Origin Resource Sharing : 다중 서버 접속
 const cors = require("cors");
 // const multer = require("multer");
+require("dotenv").config({path: "./.env"});
 
 const host = "0.0.0.0";
 const port = process.env.PORT || 3030;
@@ -21,11 +22,15 @@ const scholarshipComments = require("./controller/scholarcomments");
 const community = require("./controller/community");
 const communityComments = require("./controller/communitycomments");
 /* -----Auth----- */
-const token = require("./auth/token");
-
+const {login} = require("./auth/login");
+const {signup} = require("./auth/signup");
+const {auth} = require("./auth/authMiddleware"); //나중에 적용
 /* -----사용자 인증----- */
 server.post("/api/login", function (req, res) {
-  token.getToken(req, res);
+  login(req, res);
+});
+server.post("/api/signup", function (req, res) {
+  signup(req, res);
 });
 /* -----공지사항----- */
 server.get("/api/announcement", announcement.show);

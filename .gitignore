@@ -1,4 +1,5 @@
 /node_modules
 /server/database.json
+/server/auth.json
 /gittoken
 /.env

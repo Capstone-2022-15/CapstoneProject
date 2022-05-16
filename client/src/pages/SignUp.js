@@ -7,7 +7,8 @@ function SignUp() {
       <div>회원가입</div>
       <InputBox name="ID" id="id" type="text" />
       <InputBox name="Password" id="pw" type="text" />
-      <button>로그인</button>
+      <InputBox name="이메일" id="email" type="text" />
+      <button>확인</button>
     </div>
   );
 }

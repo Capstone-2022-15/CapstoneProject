@@ -8,11 +8,11 @@ import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <>
     <Provider store={store}>
       <Router history={history}>
         <App />
       </Router>
     </Provider>
-  </React.StrictMode>
+  </>
 );

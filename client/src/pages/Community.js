@@ -26,7 +26,21 @@ function Community() {
             {Object.keys(communityList).length > 1 ? (
               communityList.data.map((board) => (
                 <li key={board.idx}>
-                  <Link to={{ pathname: `/announcement/${board.idx}` }}>
+                  {/* CommunityBoard에 상세 내용 넘기기 */}
+                  <Link
+                    to={{
+                      pathname: `/community/${board.idx}`,
+                    }}
+                    // state={{
+                    //   id: board.idx,
+                    //   subject: board.subject,
+                    //   content: board.content,
+                    //   writer: board.writer,
+                    //   createDate: board.createDate,
+                    //   updateDate: board.updateDate,
+                    //   hit: board.hit,
+                    // }}
+                  >
                     <span>{board.subject}</span>
                   </Link>
                 </li>

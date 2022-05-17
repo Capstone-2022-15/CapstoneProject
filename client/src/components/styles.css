@@ -1,0 +1,12 @@
+.calendar .day{
+    position: relative;
+    width: calc(70% / 7);
+    height: 130px;
+    display: inline-block;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    z-index: 1;
+    text-align: center;
+}

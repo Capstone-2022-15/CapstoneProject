@@ -2,7 +2,7 @@ const express = require("express");
 //Cross-Origin Resource Sharing : 다중 서버 접속
 const cors = require("cors");
 // const multer = require("multer");
-require("dotenv").config({path: "./.env"});
+require("dotenv").config({ path: "../.env" });
 
 const host = "0.0.0.0";
 const port = process.env.PORT || 3030;
@@ -22,9 +22,9 @@ const scholarshipComments = require("./controller/scholarcomments");
 const community = require("./controller/community");
 const communityComments = require("./controller/communitycomments");
 /* -----Auth----- */
-const {login} = require("./auth/login");
-const {signup} = require("./auth/signup");
-const {auth} = require("./auth/authMiddleware"); //나중에 적용
+const { login } = require("./auth/login");
+const { signup } = require("./auth/signup");
+const { auth } = require("./auth/authMiddleware"); //나중에 적용
 /* -----사용자 인증----- */
 server.post("/api/login", function (req, res) {
   login(req, res);
@@ -33,71 +33,88 @@ server.post("/api/signup", function (req, res) {
   signup(req, res);
 });
 /* -----공지사항----- */
-server.get("/api/announcement", announcement.show);
-server.get("/api/announcement/:id", announcement.detail);
-server.post("/api/announcement", function (req, res) {
+server.get("/api/announcement", auth, announcement.show);
+server.get("/api/announcement/:id", auth, announcement.detail);
+server.post("/api/announcement", auth, function (req, res) {
   announcement.create(req, res);
 });
-server.delete("/api/announcement/:id", announcement.delete);
-server.post("/api/announcement/:id", function (req, res) {
+server.delete("/api/announcement/:id", auth, announcement.delete);
+server.post("/api/announcement/:id", auth, function (req, res) {
   announcement.update(req, res);
 });
 
-server.get("/api/announcement/:id/comments", announcementComments.show);
-server.post("/api/announcement/:id/comments", announcementComments.create);
+server.get("/api/announcement/:id/comments", auth, announcementComments.show);
+server.post(
+  "/api/announcement/:id/comments",
+  auth,
+  announcementComments.create
+);
 server.delete(
   "/api/announcement/:id/comments/:idx",
+  auth,
   announcementComments.delete
 );
 server.post("/api/announcement/:id/comments/:idx", announcementComments.update);
 
 /* -----학사일정----- */
-server.get("/api/degree", degree.show);
-server.get("/api/degree/:id", degree.detail);
-server.post("/api/degree", function (req, res) {
+server.get("/api/degree", auth, degree.show);
+server.get("/api/degree/:id", auth, degree.detail);
+server.post("/api/degree", auth, function (req, res) {
   degree.create(req, res);
 });
-server.delete("/api/degree/:id", degree.delete);
-server.post("/api/degree/:id", function (req, res) {
+server.delete("/api/degree/:id", auth, degree.delete);
+server.post("/api/degree/:id", auth, function (req, res) {
   degree.update(req, res);
 });
 
-server.get("/api/degree/:id/comments", degreeComments.show);
-server.post("/api/degree/:id/comments", degreeComments.create);
-server.delete("/api/degree/:id/comments/:idx", degreeComments.delete);
-server.post("/api/degree/:id/comments/:idx", degreeComments.update);
+server.get("/api/degree/:id/comments", auth, degreeComments.show);
+server.post("/api/degree/:id/comments", auth, degreeComments.create);
+server.delete("/api/degree/:id/comments/:idx", auth, degreeComments.delete);
+server.post("/api/degree/:id/comments/:idx", auth, degreeComments.update);
 
 /* -----장학정보----- */
-server.get("/api/scholarship", scholarship.show);
-server.get("/api/scholarship/:id", scholarship.detail);
-server.post("/api/scholarship", function (req, res) {
+server.get("/api/scholarship", auth, scholarship.show);
+server.get("/api/scholarship/:id", auth, scholarship.detail);
+server.post("/api/scholarship", auth, function (req, res) {
   scholarship.create(req, res);
 });
-server.delete("/api/scholarship/:id", scholarship.delete);
-server.post("/api/scholarship/:id", function (req, res) {
+server.delete("/api/scholarship/:id", auth, scholarship.delete);
+server.post("/api/scholarship/:id", auth, function (req, res) {
   scholarship.update(req, res);
 });
 
-server.get("/api/scholarship/:id/comments", scholarshipComments.show);
-server.post("/api/scholarship/:id/comments", scholarshipComments.create);
-server.delete("/api/scholarship/:id/comments/:idx", scholarshipComments.delete);
-server.post("/api/scholarship/:id/comments/:idx", scholarshipComments.update);
+server.get("/api/scholarship/:id/comments", auth, scholarshipComments.show);
+server.post("/api/scholarship/:id/comments", auth, scholarshipComments.create);
+server.delete(
+  "/api/scholarship/:id/comments/:idx",
+  auth,
+  scholarshipComments.delete
+);
+server.post(
+  "/api/scholarship/:id/comments/:idx",
+  auth,
+  scholarshipComments.update
+);
 
 /* -----커뮤니티----- */
-server.get("/api/community", community.show);
-server.get("/api/community/:id", community.detail);
-server.post("/api/community", function (req, res) {
+server.get("/api/community", auth, community.show);
+server.get("/api/community/:id", auth, community.detail);
+server.post("/api/community", auth, function (req, res) {
   community.create(req, res);
 });
-server.delete("/api/community/:id", community.delete);
-server.post("/api/community/:id", function (req, res) {
+server.delete("/api/community/:id", auth, community.delete);
+server.post("/api/community/:id", auth, function (req, res) {
   community.update(req, res);
 });
 
-server.get("/api/community/:id/comments", communityComments.show);
-server.post("/api/community/:id/comments", communityComments.create);
-server.delete("/api/community/:id/comments/:idx", communityComments.delete);
-server.post("/api/community/:id/comments/:idx", communityComments.update);
+server.get("/api/community/:id/comments", auth, communityComments.show);
+server.post("/api/community/:id/comments", auth, communityComments.create);
+server.delete(
+  "/api/community/:id/comments/:idx",
+  auth,
+  communityComments.delete
+);
+server.post("/api/community/:id/comments/:idx", auth, communityComments.update);
 
 server.listen(port, host, () => {
   console.log(`Listening on port ${port}`);

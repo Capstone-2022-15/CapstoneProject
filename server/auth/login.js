@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
     if (rows[0].isThere == 1) {
       //DB에서 정보 얻어오기
       const sql =
-        "SELECT A.idx, A.name FROM member as A WHERE A.id = ? AND A.password = ?";
+        "SELECT A.idx, A.name FROM member as A WHERE A.id = ? AND A.password = ? AND enabled = 0";
       const [rows, fields] = await connection.query(sql, params);
       //access 토큰 생성
       const token = jwt.sign(
@@ -80,3 +80,4 @@ exports.login = async (req, res) => {
     });
   }
 };
+//bcrypt로 암호화 가능

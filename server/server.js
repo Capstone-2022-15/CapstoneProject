@@ -24,13 +24,17 @@ const communityComments = require("./controller/communitycomments");
 /* -----Auth----- */
 const { login } = require("./auth/login");
 const { signup } = require("./auth/signup");
-const { auth } = require("./auth/authMiddleware"); //나중에 적용
+const { deleteAcc } = require("./auth/deleteAcc");
+const { auth } = require("./auth/authMiddleware");
 /* -----사용자 인증----- */
 server.post("/api/login", function (req, res) {
   login(req, res);
 });
 server.post("/api/signup", function (req, res) {
   signup(req, res);
+});
+server.delete("/api/user/delete", function (req, res) {
+  deleteAcc(req, res);
 });
 /* -----공지사항----- */
 server.get("/api/announcement", auth, announcement.show);

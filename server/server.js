@@ -7,6 +7,7 @@ require("dotenv").config({ path: "../.env" });
 const host = "0.0.0.0";
 const port = process.env.PORT || 3030;
 const bodyParser = require("body-parser");
+const imageParser = bodyParser.urlencoded({ extended: false });
 const server = express();
 server.use(cors());
 server.use(bodyParser.json());
@@ -21,6 +22,7 @@ const scholarship = require("./controller/scholarship");
 const scholarshipComments = require("./controller/scholarcomments");
 const community = require("./controller/community");
 const communityComments = require("./controller/communitycomments");
+const { upload } = require("./controller/imageMiddleware");
 /* -----Auth----- */
 const { login } = require("./auth/login");
 const { signup } = require("./auth/signup");
@@ -37,11 +39,26 @@ server.delete("/api/user/delete", function (req, res) {
   deleteAcc(req, res);
 });
 /* -----공지사항----- */
-server.get("/api/announcement", auth, announcement.show);
-server.get("/api/announcement/:id", auth, announcement.detail);
+server.get("/api/announcement", auth, announcement.show); //전체 GET
+server.get("/api/announcement/:id", auth, announcement.detail); //게시물 하나 GET
+server.get("/api/announcement/:id/:image", auth, announcement.showImage); //게시물의 image GET
 server.post("/api/announcement", auth, function (req, res) {
   announcement.create(req, res);
-});
+}); //게시물 POST
+server.post(
+  "/api/announcement/upload/:id",
+  auth,
+  imageParser,
+  upload.single("img"),
+  announcement.upload
+); //게시물의 1개의 이미지 POST
+server.post(
+  "/api/announcement/upload/multi/:id",
+  auth,
+  imageParser,
+  upload.array("img"),
+  announcement.uploads
+); //게시물의 여러개의 이미지 POST
 server.delete("/api/announcement/:id", auth, announcement.delete);
 server.post("/api/announcement/:id", auth, function (req, res) {
   announcement.update(req, res);

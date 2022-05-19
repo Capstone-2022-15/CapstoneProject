@@ -1,6 +1,4 @@
 const fs = require("fs");
-// const cors = require("cors");
-// app.use(cors());
 
 const data = fs.readFileSync("./database.json");
 const conf = JSON.parse(data);
@@ -38,7 +36,7 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const connection = await getConnection();
-    const sql =
+    let sql =
       "INSERT INTO scholarship VALUES (null,?,?,?,?,?,now(),now(),0,?,0,0)";
     const config_idx = 3; // 설정
     const subject = req.body.subject;
@@ -54,9 +52,15 @@ exports.create = async (req, res) => {
       writer_nick,
       password,
     ];
-    const [rows, field] = await connection.query(sql, params);
+    let [rows, field] = await connection.query(sql, params);
     if (rows.affectedRows == 1) {
-      res.status(204).json();
+      // POST한 데이터의 ID 값을 가져온다.
+      sql = "SELECT last_insert_id()";
+      [rows, field] = await connection.query(sql);
+      res.status(200).json({
+        code: "204",
+        contentId: rows[0],
+      });
     } else if (rows.affectedRows > 1) {
       res
         .status(409)
@@ -74,11 +78,33 @@ exports.create = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const connection = await getConnection();
-    // console.log(req.params.id);
-    const sql = "UPDATE scholarship SET isDeleted = 1 WHERE idx = ?";
+    let sql = "UPDATE scholarship SET isDeleted = 1 WHERE idx = ?";
     const params = [req.params.id];
-    const [rows, field] = await connection.query(sql, params);
+    let [rows, field] = await connection.query(sql, params);
     if (rows.changedRows > 0) {
+      //파일 테이블의 파일도 지운다.
+      sql = "UPDATE scholarFile SET isDeleted = 1 WHERE board_idx = ?";
+      await connection.query(sql, params);
+      //지워진 파일의 이름들을 가져온다.
+      sql =
+        "SELECT A.saveName FROM scholarFile as A WHERE board_idx = ? AND isDeleted = 1";
+      [rows, field] = await connection.query(sql, params);
+      //실제 파일들을 지운다.
+      for (i = 0; i < rows.length; i++) {
+        if (fs.existsSync(`../../media/` + rows[i].saveName)) {
+          try {
+            fs.unlinkSync(`../../media/` + rows[i].saveName);
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          console.error(error);
+          return res.status(500).json({
+            code: 500,
+            message: "서버 에러",
+          });
+        }
+      }
       res.status(204).send();
     } else {
       res.status(400).json({ status: "400", message: "Not matched id" });
@@ -93,7 +119,7 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const connection = await getConnection();
-    const sql =
+    let sql =
       "UPDATE scholarship SET subject = ?, content = ?, updateDate = now() WHERE idx = ? AND isDeleted = 0";
     const subject = req.body.subject;
     const content = req.body.content;
@@ -115,13 +141,21 @@ exports.update = async (req, res) => {
 exports.detail = async (req, res) => {
   try {
     const connection = await getConnection();
-    const sql =
+    let sql =
       "SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply, A.password FROM scholarship as A WHERE A.isDeleted = 0 AND A.idx = ?";
     const id = req.params.id;
-    const [rows, fields] = await connection.query(sql, id);
+    let [rows, fields] = await connection.query(sql, id);
     if (rows[0]) {
-      res.status(200).json({ status: "200", data: rows });
-      const sql =
+      //게시글 정보
+      const data = rows[0];
+      sql =
+        "SELECT A.saveName FROM scholarFile as A WHERE A.board_idx = ? AND A.isDeleted = 0";
+      [rows, fields] = await connection.query(sql, id);
+      //파일 정보
+      const image = rows;
+      res.status(200).json({ status: "200", data: data, image: image });
+      //조회수
+      sql =
         "UPDATE scholarship as A set A.hit = IFNULL(hit, 0) + 1 WHERE A.idx = ?";
       await connection.query(sql, id);
     } else {
@@ -130,5 +164,63 @@ exports.detail = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ status: "400", message: error.message });
+  }
+};
+
+/* -----공지사항 사진 불러오기----- */
+exports.showImage = async (req, res) => {
+  //이미지 saveName params으로 받아오기
+  const name = req.params.image;
+  await fs.readFile(`../../media/${name}`, (err, data) => {
+    res.status(200).send(data);
+  });
+};
+
+/* -----공지사항 사진 1개 POST----- */
+exports.upload = async (req, res) => {
+  try {
+    const connection = await getConnection();
+    const id = req.params.id;
+    const originName = req.file.originalname;
+    const saveName = req.file.filename;
+    let sql = "INSERT INTO scholarFile VALUES (null,?,?,?,0)";
+    const params = [id, originName, saveName];
+    const [rows, fields] = await connection.query(sql, params);
+    if (rows.changedRows > 0) {
+      res.status(204).json();
+    } else {
+      res.status(400).json({ status: "400", message: "Not matched id" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버 에러",
+    });
+  }
+};
+
+/* -----공지사항 사진 여러개 POST----- */
+exports.uploads = async (req, res) => {
+  try {
+    const connection = await getConnection();
+    const id = req.params.id;
+    let sql = "INSERT INTO scholarFile VALUES (null,?,?,?,0)";
+    for (i = 0; i < req.files.length; i++) {
+      const originName = req.files[i].originalname;
+      const saveName = req.files[i].filename;
+      const params = [id, originName, saveName];
+      const [rows, fields] = await connection.query(sql, params);
+      if ((rows.changedRows = 0)) {
+        res.status(400).json({ status: "400", message: "Not matched id" });
+      }
+    }
+    res.status(204).json();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버 에러",
+    });
   }
 };

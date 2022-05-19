@@ -80,9 +80,24 @@ server.post("/api/announcement/:id/comments/:idx", announcementComments.update);
 /* -----학사일정----- */
 server.get("/api/degree", auth, degree.show);
 server.get("/api/degree/:id", auth, degree.detail);
+server.get("/api/degree/:id/:image", auth, degree.showImage); //게시물의 image GET
 server.post("/api/degree", auth, function (req, res) {
   degree.create(req, res);
 });
+server.post(
+  "/api/degree/upload/:id",
+  auth,
+  imageParser,
+  upload.single("img"),
+  degree.upload
+); //게시물의 1개의 이미지 POST
+server.post(
+  "/api/degree/upload/multi/:id",
+  auth,
+  imageParser,
+  upload.array("img"),
+  degree.uploads
+); //게시물의 여러개의 이미지 POST
 server.delete("/api/degree/:id", auth, degree.delete);
 server.post("/api/degree/:id", auth, function (req, res) {
   degree.update(req, res);
@@ -96,9 +111,25 @@ server.post("/api/degree/:id/comments/:idx", auth, degreeComments.update);
 /* -----장학정보----- */
 server.get("/api/scholarship", auth, scholarship.show);
 server.get("/api/scholarship/:id", auth, scholarship.detail);
+server.get("/api/scholarship/:id/:image", auth, scholarship.showImage); //게시물의 image GET
 server.post("/api/scholarship", auth, function (req, res) {
   scholarship.create(req, res);
 });
+server.post(
+  "/api/scholarship/upload/:id",
+  auth,
+  imageParser,
+  upload.single("img"),
+  scholarship.upload
+); //게시물의 1개의 이미지 POST
+server.post(
+  "/api/scholarship/upload/multi/:id",
+  auth,
+  imageParser,
+  upload.array("img"),
+  scholarship.uploads
+); //게시물의 여러개의 이미지 POST
+
 server.delete("/api/scholarship/:id", auth, scholarship.delete);
 server.post("/api/scholarship/:id", auth, function (req, res) {
   scholarship.update(req, res);
@@ -120,9 +151,25 @@ server.post(
 /* -----커뮤니티----- */
 server.get("/api/community", auth, community.show);
 server.get("/api/community/:id", auth, community.detail);
+server.get("/api/community/:id/:image", auth, community.showImage); //게시물의 image GET
 server.post("/api/community", auth, function (req, res) {
   community.create(req, res);
 });
+server.post(
+  "/api/community/upload/:id",
+  auth,
+  imageParser,
+  upload.single("img"),
+  community.upload
+); //게시물의 1개의 이미지 POST
+server.post(
+  "/api/community/upload/multi/:id",
+  auth,
+  imageParser,
+  upload.array("img"),
+  community.uploads
+); //게시물의 여러개의 이미지 POST
+
 server.delete("/api/community/:id", auth, community.delete);
 server.post("/api/community/:id", auth, function (req, res) {
   community.update(req, res);

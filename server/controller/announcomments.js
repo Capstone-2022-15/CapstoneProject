@@ -1,18 +1,4 @@
-const fs = require("fs");
-
-const data = fs.readFileSync("./database.json");
-const conf = JSON.parse(data);
-const mysql = require("mysql2/promise");
-
-const getConnection = async () => {
-  let connection = await mysql.createConnection({
-    host: conf.host,
-    user: conf.user,
-    password: conf.password,
-    database: conf.database,
-  });
-  return connection;
-};
+const { getConnection } = require("../model/getConnection")
 
 /* -----공지사항 댓글 전체 GET----- */
 exports.show = async (req, res) => {

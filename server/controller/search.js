@@ -8,7 +8,7 @@ exports.search = async (req, res) => {
     const what = "%" + req.body.what + "%";
     const params = [what]
     console.log(params);
-    let sql = `SELECT A.idx, A.subject, A.content, A.writer FROM ${category} as A WHERE A.${where} LIKE ?`
+    let sql = `SELECT A.idx, A.subject, A.content, A.writer, A.writer_nick FROM ${category} as A WHERE A.${where} LIKE ?`
     let [rows, fields] = await connection.query(sql, params);
     if(rows[0]){
       res.status(200).json({

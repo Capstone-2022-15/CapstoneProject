@@ -34,7 +34,7 @@ server.post("/api/signout", (req, res) => signout(req, res));
 /* -----검색 기능----- */
 server.get("/api/search", (req, res) => search(req, res));
 /* ----- 캘린더 ----- */
-server.get("/api/calendar", (req, res) => calendar(req, res));
+server.get("/api/calendar", auth, (req, res) => calendar(req, res));
 /* ----- 게시물 CRUD ----- */
 server.get("/api/:category", auth, (req, res) => board.show(req, res)); //전체 GET
 server.get("/api/:category/:id", auth, (req, res) => board.detail(req, res)); //게시물 하나 GET

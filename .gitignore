@@ -1,5 +1,6 @@
 /node_modules
 /server/database.json
 /server/auth.json
+/client
 /gittoken
 /.env

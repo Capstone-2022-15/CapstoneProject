@@ -4,9 +4,7 @@
   "description": "Capstone design class team 15",
   "main": "index.js",
   "scripts": {
-    "server": "cd server && nodemon server",
-    "client": "cd client && npm start",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "server": "cd server && nodemon server"
   },
   "repository": {
     "type": "git",

@@ -13,6 +13,7 @@ exports.auth = async (req, res, next) => {
     req.decoded = jwt.verify(req.headers.authorization, SECRET_KEY);
     return next();
   } catch (error) {
+    console.log(error);
     /* 인증 실패 */
     // 유효시간이 초과된 경우
     if (error.name === "TokenExpiredError") {
@@ -59,13 +60,13 @@ exports.auth = async (req, res, next) => {
           });
         }
       }
-      // 토큰의 비밀키가 일치하지 않는 경우
-      if (error.name === "JsonWebTokenError") {
-        return res.status(401).json({
-          code: 401,
-          message: "유효하지 않은 토큰입니다.",
-        });
-      }
+    }
+    // 토큰의 비밀키가 일치하지 않는 경우
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        code: 401,
+        message: "유효하지 않은 토큰입니다.",
+      });
     }
   }
 };

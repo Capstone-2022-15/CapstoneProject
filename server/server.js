@@ -18,12 +18,14 @@ const board = require("./controller/board");
 const comments = require("./controller/comments");
 const { upload } = require("./controller/imageMiddleware");
 const { search } = require("./controller/search");
+const { calendar } = require("./controller/calendar");
 /* -----Auth & Middleware----- */
 const { login } = require("./auth/login");
 const { signup } = require("./auth/signup");
 const { deleteAcc } = require("./auth/deleteAcc");
 const { auth } = require("./auth/authMiddleware");
 const { signout } = require("./auth/signout");
+
 /* -----사용자 인증----- */
 server.post("/api/login", (req, res) => login(req, res));
 server.post("/api/signup", (req, res) => signup(req, res));
@@ -31,30 +33,39 @@ server.delete("/api/user/delete", (req, res) => deleteAcc(req, res));
 server.post("/api/signout", (req, res) => signout(req, res));
 /* -----검색 기능----- */
 server.get("/api/search", (req, res) => search(req, res));
-/* ----- URL 통합 ----- */
+/* ----- 캘린더 ----- */
+server.get("/api/calendar", (req, res) => calendar(req, res));
+/* ----- 게시물 CRUD ----- */
 server.get("/api/:category", auth, (req, res) => board.show(req, res)); //전체 GET
 server.get("/api/:category/:id", auth, (req, res) => board.detail(req, res)); //게시물 하나 GET
-server.get("/api/:category/:id/image/:image", auth, (req, res) =>
-  board.showImage(req, res)
-); //게시물의 image GET
+server.get(
+  "/api/:category/:id/image/:image",
+  auth,
+  (
+    req,
+    res //게시물의 image GET
+  ) => board.showImage(req, res)
+);
 server.post("/api/:category", auth, (req, res) => board.create(req, res)); //게시물 POST
 server.post(
+  //게시물의 1개의 이미지 POST
   "/api/:category/upload/:id",
   auth,
   imageParser,
   upload.single("img"),
   (req, res) => board.upload(req, res)
-); //게시물의 1개의 이미지 POST
+);
 server.post(
+  //게시물의 여러개의 이미지 POST
   "/api/:category/upload/multi/:id",
   auth,
   imageParser,
   upload.array("img"),
   (req, res) => board.uploads(req, res)
-); //게시물의 여러개의 이미지 POST
+);
 server.delete("/api/:category/:id", auth, (req, res) => board.delete(req, res));
 server.post("/api/:category/:id", auth, (req, res) => board.update(req, res));
-
+/* ----- 게시물 댓글 CRUD ----- */
 server.get("/api/:category/:id/comments", auth, (req, res) =>
   comments.show(req, res)
 );

@@ -1,4 +1,4 @@
-const { getConnection } = require("../model/getConnection")
+const { getConnection } = require("../model/getConnection");
 
 exports.search = async (req, res) => {
   try {
@@ -6,17 +6,37 @@ exports.search = async (req, res) => {
     const category = req.body.category;
     const where = req.body.where;
     const what = "%" + req.body.what + "%";
-    const params = [what]
-    console.log(params);
-    let sql = `SELECT A.idx, A.subject, A.content, A.writer, A.writer_nick FROM ${category} as A WHERE A.${where} LIKE ?`
-    let [rows, fields] = await connection.query(sql, params);
-    if(rows[0]){
-      res.status(200).json({
-        code: 200,
-        data: rows
-      })
+    if (category == "whole") {
+      const params = [what];
+      sql = `SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick FROM board as A WHERE A.isDeleted = 0 AND A.${where} LIKE ?`;
+      [rows, fields] = await connection.query(sql, params);
+      if (rows[0]) {
+        res.status(200).json({
+          code: 200,
+          data: rows,
+        });
+      } else {
+        res.status(200).json({ status: "200", message: "Nothing :)" });
+      }
     } else {
-
+      let sql = `SELECT A.idx FROM config as A WHERE A.tableName = ?`;
+      let [rows, fields] = await connection.query(sql, category);
+      if (rows[0]) {
+        const config_idx = rows[0].idx;
+        sql = `SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick FROM board as A WHERE A.isDeleted = 0 AND A.config_idx = ? AND A.${where} LIKE ?`;
+        const params = [config_idx, what];
+        [rows, fields] = await connection.query(sql, params);
+        if (rows[0]) {
+          res.status(200).json({
+            code: 200,
+            data: rows,
+          });
+        } else {
+          res.status(200).json({ status: "200", message: "Nothing :)" });
+        }
+      } else {
+        res.status(404).json({ status: "404", message: "Wrong category" });
+      }
     }
   } catch (error) {
     console.error(error);
@@ -25,4 +45,4 @@ exports.search = async (req, res) => {
       message: "서버 에러",
     });
   }
-}
+};

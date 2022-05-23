@@ -64,7 +64,9 @@ server.post(
   upload.array("img"),
   (req, res) => image.uploads(req, res)
 );
-server.delete("/api/:category/:id/image/:image", (req, res) => image.delete(req, res));
+server.delete("/api/:category/:id/image/:image", auth, (req, res) =>
+  image.delete(req, res)
+);
 server.delete("/api/:category/:id", auth, (req, res) => board.delete(req, res));
 server.post("/api/:category/:id", auth, (req, res) => board.update(req, res));
 /* ----- 게시물 댓글 CRUD ----- */

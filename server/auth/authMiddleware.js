@@ -13,7 +13,6 @@ exports.auth = async (req, res, next) => {
     req.decoded = jwt.verify(req.headers.authorization, SECRET_KEY);
     return next();
   } catch (error) {
-    console.log(error);
     /* 인증 실패 */
     // 유효시간이 초과된 경우
     if (error.name === "TokenExpiredError") {

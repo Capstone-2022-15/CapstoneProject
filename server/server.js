@@ -15,6 +15,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 /* -----Controller & Middleware----- */
 const board = require("./controller/board");
+const image = require("./controller/image");
 const comments = require("./controller/comments");
 const { upload } = require("./controller/imageMiddleware");
 const { search } = require("./controller/search");
@@ -44,7 +45,7 @@ server.get(
   (
     req,
     res //게시물의 image GET
-  ) => board.showImage(req, res)
+  ) => image.showImage(req, res)
 );
 server.post("/api/:category", auth, (req, res) => board.create(req, res)); //게시물 POST
 server.post(
@@ -53,7 +54,7 @@ server.post(
   auth,
   imageParser,
   upload.single("img"),
-  (req, res) => board.upload(req, res)
+  (req, res) => image.upload(req, res)
 );
 server.post(
   //게시물의 여러개의 이미지 POST
@@ -61,8 +62,9 @@ server.post(
   auth,
   imageParser,
   upload.array("img"),
-  (req, res) => board.uploads(req, res)
+  (req, res) => image.uploads(req, res)
 );
+server.delete("/api/:category/:id/image/:image", (req, res) => image.delete(req, res));
 server.delete("/api/:category/:id", auth, (req, res) => board.delete(req, res));
 server.post("/api/:category/:id", auth, (req, res) => board.update(req, res));
 /* ----- 게시물 댓글 CRUD ----- */

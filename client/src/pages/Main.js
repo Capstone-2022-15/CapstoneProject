@@ -1,12 +1,12 @@
-// https://github.com/marvelopers/react_template/blob/master/src/util/calendar/component/Calendar.tsx
-
 import React, { useState } from "react";
 import Header from "../components/HeaderDom";
+import Calendar from "../components/Calendar";
 
 function Main() {
   return (
     <>
       <Header />
+      <Calendar />
     </>
   );
 }

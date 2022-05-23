@@ -25,9 +25,7 @@ const reducers = {
   },
 
   // 내용
-  getCommunity: (state, action) => {
-    // state.community = action.payload?.data ?? [];
-  },
+  getCommunity: (state, action) => {},
   getCommunitySuccess: (state, action) => {
     state.community = action.payload?.data ?? [];
     state.status = action.payload?.status;

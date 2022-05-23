@@ -51,7 +51,7 @@ function* asyncGetCommunityList() {
 
 function* asyncGetCommunity(action) {
   try {
-    const response = yield retry(3, 10 * SECOND, apiGetCommunity, {
+    const response = yield retry(5, 10 * SECOND, apiGetCommunity, {
       idx: action.payload,
     });
     console.log(response);

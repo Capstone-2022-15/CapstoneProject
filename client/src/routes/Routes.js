@@ -1,5 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
+import PrivateRoutes from "../helpers/PrivateRoutes";
+import PublicRoutes from "../helpers/PublicRoutes";
 
 function RoutesApp() {
   // 지연 로딩
@@ -24,45 +26,32 @@ function RoutesApp() {
         fallback={<div>Loading...</div> /** 아래를 불러오는 동안 대신 표시 */}
       >
         <Routes>
-          <Route path="/" element={<Login />} /** 메인 화면 : 로그인 */ />
-          <Route exact path="/signup" element={<SignUp />} /** 회원가입 */ />
-          <Route
-            exact
-            path="/password"
-            element={<FindPw />} /** 패스워드 찾기 */
-          />
+          <Route path="/" element={<Login />} /** 첫 화면 : 로그인 */ />
+          <Route path="/signup" element={<SignUp />} /** 회원가입 */ />
+          <Route path="/password" element={<FindPw />} /** 패스워드 찾기 */ />
 
-          <Route exact path="/main" element={<Main />} /** 달력 */ />
+          <Route path="/" element={<PrivateRoutes />}>
+            {/* 메인 화면 : 달력, 여기로 리다이렉트  */}
+            <Route path="/main" element={<Main />} />
 
-          <Route
-            exact
-            path="/announcement"
-            element={<Announcement />} /** 공지사항 */
-          />
-          <Route
-            exact
-            path="/announcement/:id"
-            element={<AnnouncementBoard />}
-          />
+            {/* 공지사항  */}
+            <Route path="/announcement" element={<Announcement />} />
+            <Route path="/announcement/:id" element={<AnnouncementBoard />} />
 
-          <Route exact path="/degree" element={<Degree />} /** 학사정보 */ />
-          <Route exact path="/degree/:id" element={<DegreeBoard />} />
+            <Route path="/degree" element={<Degree />} /** 학사정보 */ />
+            <Route path="/degree/:id" element={<DegreeBoard />} />
 
-          <Route
-            exact
-            path="/scholarship"
-            element={<Scholarship />} /** 장학정보 */
-          />
-          <Route exact path="/scholarship/:id" element={<ScholarshipBoard />} />
+            <Route
+              path="/scholarship"
+              element={<Scholarship />} /** 장학정보 */
+            />
+            <Route path="/scholarship/:id" element={<ScholarshipBoard />} />
 
-          <Route
-            exact
-            path="/community"
-            element={<Community />} /** 커뮤니티 */
-          />
-          <Route exact path="/community/:id" element={<CommunityBoard />} />
+            <Route path="/community" element={<Community />} /** 커뮤니티 */ />
+            <Route path="/community/:id" element={<CommunityBoard />} />
 
-          <Route exact path="/profile" element={<Profile />} /** 내 정보 */ />
+            <Route path="/profile" element={<Profile />} /** 내 정보 */ />
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>

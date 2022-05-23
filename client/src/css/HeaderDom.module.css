@@ -3,26 +3,24 @@ html {
 }
 .header {
   position: absolute;
-  /* width: 5000px; */
-  /* height: 50px; */
   text-align: center;
   max-width: 100%;
   background-position: center;
   background-size: cover;
   z-index: 1;
 }
-nav {
+/* nav {
   position: relative;
   font-size: 15pt;
-}
-nav ul {
+} */
+/* nav ul {
   margin: 0 auto;
   width: auto;
   margin: 0;
   padding: 0;
   background-color: rgb(36, 197, 247);
   text-align: center;
-}
-nav li {
+} */
+/* nav li {
   display: inline-block;
-}
+} */

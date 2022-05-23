@@ -10,22 +10,20 @@ import icon from "../img/Button-X.png"; // 이미지 직접 루트 말고 임포
 import "../css/ModalDom.css";
 
 function ModalDom({ isModalDimmer, handleModal, link }) {
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  // const [userId, setUserId] = useState("");
+  // const [password, setPassword] = useState("");
 
-  // const history = useHistory();
+  // const { loading, payload } = useSelector((state) => state.signInReducer);
 
-  const { loading, payload } = useSelector((state) => state.signInReducer);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(signInActions.signInRequest());
+  // }, [dispatch]);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(signInActions.signInRequest());
-  }, [dispatch]);
-
-  const $btn = document.querySelector("#btn");
-  const $id = document.querySelector("#id");
-  const $pw = document.querySelector("#password");
-  $btn.addEventListener("click", (e) => {});
+  // const $btn = document.querySelector("#btn");
+  // const $id = document.querySelector("#id");
+  // const $pw = document.querySelector("#password");
+  // $btn.addEventListener("click", (e) => {});
 
   return (
     <div className="modalDimmer" onClick={isModalDimmer}>
@@ -46,20 +44,20 @@ function ModalDom({ isModalDimmer, handleModal, link }) {
               id="id"
               label="Enter the id"
               variant="outlined"
-              onChange={(e) => setUserId(e.target.value)}
+              // onChange={(e) => setUserId(e.target.value)}
             />
             <TextField
               id="password"
               label="Enter the Password"
               variant="outlined"
-              onChange={(e) => setPassword(e.target.value)}
+              // onChange={(e) => setPassword(e.target.value)}
             />
           </Box>
           <Button id="btn" variant="outlined" color="secondary">
-            {/* <Link to={link} className="link">
+            <Link to={link} className="link">
               로그인
-            </Link> */}
-            로그인
+            </Link>
+            {/* 로그인 */}
           </Button>
         </div>
       </div>

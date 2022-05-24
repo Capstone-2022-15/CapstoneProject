@@ -83,15 +83,16 @@ exports.delete = async (req, res) => {
     if (rows[0]) {
       const name = req.params.image;
       const id = req.params.id;
-      //실제 파일 삭제
-      fs.unlinkSync(`../../media/${name}`);
       //테이블의 파일 삭제
       sql = `UPDATE files SET isDeleted = 1 WHERE board_idx = ?`;
       [rows, fields] = await connection.query(sql, id);
-      if ((rows.changedRows = 0)) {
+      if (rows.changedRows == 0) {
         res.status(400).json({ status: "400", message: "Not matched id" });
+      } else {
+        //실제 파일 삭제
+        fs.unlinkSync(`../../media/${name}`);
+        res.status(204).json();
       }
-      res.status(204).json();
     } else {
       res.status(404).json({ status: "404", message: "Wrong URL" });
     }

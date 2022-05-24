@@ -49,7 +49,16 @@ const reducers = {
   }),
   logOutSuccess: (state, action) => ({
     ...state,
-    initialState,
+    loading: false,
+    value: {
+      id: "",
+      password: "",
+    },
+    receiver: {
+      code: 0,
+      message: "",
+      token: "",
+    },
   }),
   logOutFailure: (state, action) => ({
     ...state,

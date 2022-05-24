@@ -1,7 +1,8 @@
 import axios from "../utils/axios";
-import { all, call, fork, put, take, retry, select } from "redux-saga/effects";
+import { all, call, fork, put, take } from "redux-saga/effects";
 import { signInActions } from "../slices/signInSlice";
 
+//-------------------------------------
 function apiPostSignIn(req) {
   return axios.post(`api/login`, req);
 }

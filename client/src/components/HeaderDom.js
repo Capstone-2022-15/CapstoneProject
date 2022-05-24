@@ -52,8 +52,8 @@ function HeaderDom() {
   const navigate = useNavigate();
 
   function logOut() {
+    setTimeout(() => navigate("/", { replace: true }), 100);
     dispatch(signInActions.logOutRequest());
-    navigate("/", { replace: true });
   }
 
   return (
@@ -117,7 +117,7 @@ function HeaderDom() {
               >
                 커뮤니티
               </StyledLink>
-              <StyledLink
+              {/* <StyledLink
                 // onClick={logOut}
                 style={{
                   backgroundColor: "#3f51b5",
@@ -127,7 +127,7 @@ function HeaderDom() {
                 // onClick={handleCloseNavMenu}
               >
                 로그아웃
-              </StyledLink>
+              </StyledLink> */}
             </Box>
           </Toolbar>
         </Container>

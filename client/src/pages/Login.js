@@ -29,12 +29,6 @@ function Login() {
   const dispatch = useDispatch();
   const { loading, receiver } = useSelector((state) => state.signInReducer);
 
-  // useEffect(() => {
-  //   return() => {
-  //     dispatch(clearState());
-  //   };
-  // }, []);
-
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,13 +46,9 @@ function Login() {
       password: password,
     };
 
-    loginNav1(body).then((res) => {
-      loginNav2();
-    });
-
-    // dispatch(signInActions.signInRequest(body)); // 연속으로 실행시키는 방법?
-
-    // if (localStorage.getItem("accessToken") != null) {
+    setTimeout(() => navigate("/main", { replace: true }), 100); // 맘엔 안 들지만 리다이렉트는 이게 한계인 듯, 로딩 길어지면 같이 늘릴 것
+    dispatch(signInActions.signInRequest(body)); // 연속으로 실행시키는 방법? payload{id,pw}와 type{signin/signInRequest}
+    // if (receiver.token != null) {
     //   console.log("a");
     //   navigate("/main");
     // } else {
@@ -67,22 +57,21 @@ function Login() {
     // }
   };
 
-  function loginNav1(res) {
-    return new Promise((resolve, reject) => {
-      resolve(() => {
-        dispatch(signInActions.signInRequest(res));
-      });
-    });
-  }
-  function loginNav2() {
-    return new Promise((resolve, reject) => {
-      resolve(() => {
-        if (localStorage.getItem("accessToken") != null) {
-          navigate("/main");
-        }
-      });
-    });
-  }
+  // function loginNav1(res) {
+  //   return new Promise((resolve, reject) => {
+  //     const next = dispatch(signInActions.signInRequest(res));
+  //     resolve(next);
+  //   });
+  // }
+  // function loginNav2() {
+  //   return new Promise((resolve, reject) => {
+  //     resolve(() => {
+  //       if (localStorage.getItem("accessToken") != null) {
+  //         navigate("/main");
+  //       }
+  //     });
+  //   });
+  // }
 
   return (
     // <div className="AppDimmer">

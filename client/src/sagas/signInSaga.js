@@ -40,10 +40,15 @@ function* asyncPostSignIn(action) {
 
 function* asyncLogOut() {
   try {
-    const res = yield put(apiLogOut);
-    yield put(signInActions.logOutSuccess(res));
+    const response = yield put(apiLogOut);
+    if (window.localStorage.getItem("accessToken") == null) {
+      yield put(signInActions.logOutSuccess(response));
+    } else {
+      yield put(signInActions.logOutFailure(response));
+    }
   } catch (e) {
     console.error(e);
+    yield put(signInActions.logOutFailure(e.response));
   }
 }
 

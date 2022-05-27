@@ -11,17 +11,21 @@
 // -> 근데 api 링크 형식 때문에 못 쓸거 같음
 
 import axios from "../utils/axios";
-import { all, call, fork, put, take, retry, select } from "redux-saga/effects";
+import { all, call, fork, put, take, retry } from "redux-saga/effects";
 import qs from "query-string";
 import { communityActions } from "../slices/communitySlice";
 
 const SECOND = 1000;
 
+function apiPostCommunityAccess(req) {
+  return axios.post(`api/community`, req);
+}
+
 function apiGetCommunityList() {
   return axios.get(`api/community`);
 }
 
-function apiGetCommunity(params) {
+function apiGetCommunityBoard(params) {
   return axios.get(
     `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}` // 진짜 이 방식 뿐인가? 너무 추하다.
   );
@@ -34,6 +38,20 @@ function apiGetCommunity(params) {
 // function apiGetCommunityComments(communityId) {
 //   return axios.get(`api/community/${communityId}/comments`);
 // }
+
+function* asyncPostCommunityAccess() {
+  try {
+    const response = yield call(apiPostCommunityAccess);
+    if (response?.status === 200) {
+      yield put(communityActions.postCommunityAccess(response));
+    } else {
+      yield put(communityActions.postCommunityFailure(response));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(communityActions.postCommunityFailure(e.response));
+  }
+}
 
 function* asyncGetCommunityList() {
   try {
@@ -49,22 +67,22 @@ function* asyncGetCommunityList() {
   }
 }
 
-function* asyncGetCommunity(action) {
+function* asyncGetCommunityBoard(action) {
   try {
-    const response = yield retry(5, 10 * SECOND, apiGetCommunity, {
+    const response = yield retry(5, 10 * SECOND, apiGetCommunityBoard, {
       idx: action.payload,
     });
     console.log(response);
     console.log(action.payload);
     if (response?.status === 200) {
-      yield put(communityActions.getCommunitySuccess(response));
+      yield put(communityActions.getCommunityBoardSuccess(response));
       // yield put(communityActions.updateCommunityViews(response.data));
     } else {
-      yield put(communityActions.getCommunityFail(response));
+      yield put(communityActions.getCommunityBoardFail(response));
     }
   } catch (e) {
     console.error(e);
-    yield put(communityActions.getCommunityFail(e.response));
+    yield put(communityActions.getCommunityBoardFail(e.response));
   }
 }
 
@@ -87,6 +105,13 @@ function* asyncGetCommunity(action) {
 //   }
 // }
 
+function* watchPostCommunityAccess() {
+  while (true) {
+    const action = yield take(communityActions.postCommunityAccess);
+    yield call(asyncPostCommunityAccess, action);
+  }
+}
+
 function* watchGetCommunityList() {
   while (true) {
     const action = yield take(communityActions.getCommunityList);
@@ -94,10 +119,10 @@ function* watchGetCommunityList() {
   }
 }
 
-function* watchGetCommunity() {
+function* watchGetCommunityBoard() {
   while (true) {
-    const action = yield take(communityActions.getCommunity);
-    yield call(asyncGetCommunity, action);
+    const action = yield take(communityActions.getCommunityBoard);
+    yield call(asyncGetCommunityBoard, action);
   }
 }
 
@@ -131,8 +156,9 @@ function* watchGetCommunity() {
 
 export default function* communitySaga() {
   yield all([
+    fork(watchPostCommunityAccess),
     fork(watchGetCommunityList),
-    fork(watchGetCommunity),
+    fork(watchGetCommunityBoard),
     // fork(watchUpdateCommunityViews),
   ]);
 }

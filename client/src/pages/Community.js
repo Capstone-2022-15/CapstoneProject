@@ -10,6 +10,11 @@ function Community() {
     (state) => state.communityReducer
   );
 
+  const token = window.localStorage.getItem("accessToken");
+  useEffect(() => {
+    dispatch(communityActions.postCommunityAccess(token));
+  }, []);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(communityActions.getCommunityList());

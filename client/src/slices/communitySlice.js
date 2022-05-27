@@ -11,6 +11,15 @@ const initialState = {
 };
 
 const reducers = {
+  // 접속 확인
+  postCommunityAccess: (state, action) => {},
+  postCommunitySuccess: (state, action) => {
+    state.status = action.payload?.status;
+  },
+  postCommunityFailure: (state, action) => {
+    state.status = action.payload?.status ?? 500;
+  },
+
   // 전체 목록
   getCommunityList: (state, action) => {},
   getCommunityListSuccess: (state, action) => {
@@ -25,13 +34,13 @@ const reducers = {
   },
 
   // 내용
-  getCommunity: (state, action) => {},
-  getCommunitySuccess: (state, action) => {
+  getCommunityBoard: (state, action) => {},
+  getCommunityBoardSuccess: (state, action) => {
     state.community = action.payload?.data ?? [];
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },
-  getCommunityFail: (state, action) => {
+  getCommunityBoardFail: (state, action) => {
     state.community = initialState.communityList;
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";

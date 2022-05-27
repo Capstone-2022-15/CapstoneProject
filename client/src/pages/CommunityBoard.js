@@ -21,7 +21,7 @@ function CommunityBoard() {
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(communityActions.getCommunity(params?.id ?? 0));
+    dispatch(communityActions.getCommunityBoard(params?.id ?? 0));
   }, [dispatch, params?.id]);
 
   console.log(params?.id);

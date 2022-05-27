@@ -9,12 +9,15 @@ function apiPostSignIn(req) {
 
 function apiPostToken(req) {
   return axios.post(`api/login`, req).then((res) => {
-    localStorage.setItem("accessToken", res.data.token);
+    window.localStorage.setItem("accessToken", res.data.token);
   });
 }
 
-function apiLogOut() {
-  return localStorage.removeItem("accessToken");
+function apiLogOut(req) {
+  return window.localStorage.removeItem("accessToken");
+  // return axios.post(`api/signout`, req).then((res) => {
+  //   window.localStorage.removeItem("accessToken");
+  // });
 }
 
 //-------------------------------------
@@ -40,7 +43,7 @@ function* asyncPostSignIn(action) {
 
 function* asyncLogOut() {
   try {
-    const response = yield put(apiLogOut);
+    const response = yield call(apiLogOut); // 일반 함수일 때 call 사용, 파라미터 없어도 가능
     if (window.localStorage.getItem("accessToken") == null) {
       yield put(signInActions.logOutSuccess(response));
     } else {

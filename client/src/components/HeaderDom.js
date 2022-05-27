@@ -51,6 +51,8 @@ function HeaderDom() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // let body = { accessToken: window.localStorage.accessToken };
+
   function logOut() {
     setTimeout(() => navigate("/", { replace: true }), 100);
     dispatch(signInActions.logOutRequest());
@@ -117,17 +119,7 @@ function HeaderDom() {
               >
                 커뮤니티
               </StyledLink>
-              {/* <StyledLink
-                // onClick={logOut}
-                style={{
-                  backgroundColor: "#3f51b5",
-                  fontSize: "18px",
-                }}
-                varint="contained"
-                // onClick={handleCloseNavMenu}
-              >
-                로그아웃
-              </StyledLink> */}
+              <button onClick={logOut}>로그아웃</button>
             </Box>
           </Toolbar>
         </Container>

@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const useAuth = () => {
-  const token = window.localStorage.getItem("login-token");
+  const token = window.localStorage.getItem("accessToken");
   if (token) {
     return true;
   } else {
@@ -12,7 +12,7 @@ const useAuth = () => {
 
 function PublicRoutes() {
   const auth = useAuth();
-  return auth ? <Navigate to="/main" /> : <Outlet />;
+  return auth ? <Navigate to="/main" replace /> : <Outlet />;
 }
 
 export default PublicRoutes;

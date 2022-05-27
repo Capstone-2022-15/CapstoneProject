@@ -26,9 +26,11 @@ function RoutesApp() {
         fallback={<div>Loading...</div> /** 아래를 불러오는 동안 대신 표시 */}
       >
         <Routes>
-          <Route path="/" element={<Login />} /** 첫 화면 : 로그인 */ />
-          <Route path="/signup" element={<SignUp />} /** 회원가입 */ />
-          <Route path="/password" element={<FindPw />} /** 패스워드 찾기 */ />
+          <Route path="/" element={<PublicRoutes />}>
+            <Route path="/" element={<Login />} /** 첫 화면 : 로그인 */ />
+            <Route path="/signup" element={<SignUp />} /** 회원가입 */ />
+            <Route path="/password" element={<FindPw />} /** 패스워드 찾기 */ />
+          </Route>
 
           <Route path="/" element={<PrivateRoutes />}>
             {/* 메인 화면 : 달력, 여기로 리다이렉트  */}

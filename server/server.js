@@ -42,7 +42,6 @@ server.get("/api/:category", auth, (req, res) => board.show(req, res)); //전체
 server.get("/api/:category/:id", auth, (req, res) => board.detail(req, res)); //게시물 하나 GET
 server.get(
   "/api/:category/:id/image/:image",
-  auth,
   (
     req,
     res //게시물의 image GET

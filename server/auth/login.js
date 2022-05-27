@@ -21,6 +21,7 @@ exports.login = async (req, res) => {
         "SELECT A.idx, A.name FROM member as A WHERE A.id = ? AND A.password = ? AND enabled = 0";
       [rows, fields] = await connection.query(sql, params);
       const idx = rows[0].idx;
+      const name = rows[0].name;
       //access 토큰 생성
       const token = jwt.sign(
         {
@@ -56,6 +57,7 @@ exports.login = async (req, res) => {
           code: 200,
           message: "토큰이 발급되었습니다.",
           token: token,
+          name: name
         });
       } catch (error) {
         console.error(error);

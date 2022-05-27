@@ -8,7 +8,7 @@ exports.show = async (req, res) => {
     let sql = `SELECT A.idx FROM config as A WHERE A.tableName = ?`;
     let [rows, fields] = await connection.query(sql, category);
     if (rows[0]) {
-      sql = `SELECT C.idx, C.member_id, C.member_nick, C.createDate, C.updateDate, C.Content FROM comments as C WHERE C.ref = ? AND C.isDeleted = 0 ORDER BY C.idx ASC`;
+      sql = `SELECT C.idx, C.member_id, C.member_nick, C.createDate, C.updateDate, C.content FROM comments as C WHERE C.ref = ? AND C.isDeleted = 0 ORDER BY C.idx ASC`;
       let params = [req.params.id];
       [rows, fields] = await connection.query(sql, params);
       if (rows[0]) {

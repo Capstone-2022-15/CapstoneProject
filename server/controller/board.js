@@ -210,7 +210,7 @@ exports.detail = async (req, res) => {
       if (rows[0]) {
         //게시글 정보
         const data = rows[0];
-        sql = `SELECT A.saveName FROM files as A WHERE A.board_idx = ? AND A.isDeleted = 0`;
+        sql = `SELECT A.idx, A.saveName FROM files as A WHERE A.board_idx = ? AND A.isDeleted = 0`;
         [rows, fields] = await connection.query(sql, id);
         //파일 정보
         const image = rows;

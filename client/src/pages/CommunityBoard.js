@@ -11,22 +11,17 @@ import { communityActions } from "../slices/communitySlice";
 import Header from "../components/HeaderDom";
 
 function CommunityBoard() {
-  // const locationObj = useLocation();
-  // const board = locationObj.state;
-  // console.log(board);
-
   const params = useParams();
   const { community, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(communityActions.getCommunityBoard(params?.id ?? 0));
   }, [dispatch, params?.id]);
 
   console.log(params?.id);
-  // console.log(params.id);
-  // const board = community.data;
   console.log(community.data);
 
   return (

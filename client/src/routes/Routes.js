@@ -8,16 +8,23 @@ function RoutesApp() {
   const Login = lazy(() => import("../pages/Login"));
   const SignUp = lazy(() => import("../pages/SignUp"));
   const FindPw = lazy(() => import("../pages/FindPw"));
+
   const Main = lazy(() => import("../pages/Main"));
   const Profile = lazy(() => import("../pages/Profile"));
+
   const Announcement = lazy(() => import("../pages/Announcement"));
   const AnnouncementBoard = lazy(() => import("../pages/AnnouncementBoard"));
+
   const Degree = lazy(() => import("../pages/Degree"));
   const DegreeBoard = lazy(() => import("../pages/DegreeBoard"));
+
   const Scholarship = lazy(() => import("../pages/Scholarship"));
   const ScholarshipBoard = lazy(() => import("../pages/ScholarshipBoard"));
+
   const Community = lazy(() => import("../pages/Community"));
   const CommunityBoard = lazy(() => import("../pages/CommunityBoard"));
+  const CommunityWrite = lazy(() => import("../pages/CommunityWrite"));
+
   const NotFound = lazy(() => import("../pages/NotFound"));
 
   return (
@@ -40,19 +47,21 @@ function RoutesApp() {
             <Route path="/announcement" element={<Announcement />} />
             <Route path="/announcement/:id" element={<AnnouncementBoard />} />
 
-            <Route path="/degree" element={<Degree />} /** 학사정보 */ />
+            {/* 학사정보 */}
+            <Route path="/degree" element={<Degree />} />
             <Route path="/degree/:id" element={<DegreeBoard />} />
 
-            <Route
-              path="/scholarship"
-              element={<Scholarship />} /** 장학정보 */
-            />
+            {/* 장학정보 */}
+            <Route path="/scholarship" element={<Scholarship />} />
             <Route path="/scholarship/:id" element={<ScholarshipBoard />} />
 
-            <Route path="/community" element={<Community />} /** 커뮤니티 */ />
+            {/* 커뮤니티 */}
+            <Route path="/community" element={<Community />} />
             <Route path="/community/:id" element={<CommunityBoard />} />
+            <Route path="/community/write" element={<CommunityWrite />} />
 
-            <Route path="/profile" element={<Profile />} /** 내 정보 */ />
+            {/* 내 정보 */}
+            <Route path="/profile" element={<Profile />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

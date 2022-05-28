@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import { Typography } from "@material-ui/core";
 import React from "react";
 
+// 파라미터 추가시키기
 export const Notice = () => {
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {

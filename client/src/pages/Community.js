@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,15 +10,13 @@ function Community() {
   const { communityList, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
-
-  const token = window.localStorage.getItem("accessToken");
-  useEffect(() => {
-    dispatch(communityActions.postCommunityAccess(token));
-  }, []);
+  console.log(communityList);
+  console.log(status);
+  console.log(statusText);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(communityActions.getCommunityList());
+    setTimeout(() => dispatch(communityActions.getCommunityList()), 200);
   }, [dispatch]);
 
   return (
@@ -29,9 +28,9 @@ function Community() {
         <div>
           <ul>
             {Object.keys(communityList).length > 1 ? (
+              communityList &&
               communityList.data.map((board) => (
                 <li key={board.idx}>
-                  {/* CommunityBoard에 상세 내용 넘기기 */}
                   <Link
                     to={{
                       pathname: `/community/${board.idx}`,
@@ -54,6 +53,7 @@ function Community() {
               <div> 게시판이 없습니다. </div>
             )}
           </ul>
+          <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
         </div>
       ) : (
         <div>

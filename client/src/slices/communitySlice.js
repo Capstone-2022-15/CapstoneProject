@@ -11,15 +11,6 @@ const initialState = {
 };
 
 const reducers = {
-  // 접속 확인
-  postCommunityAccess: (state, action) => {},
-  postCommunitySuccess: (state, action) => {
-    state.status = action.payload?.status;
-  },
-  postCommunityFailure: (state, action) => {
-    state.status = action.payload?.status ?? 500;
-  },
-
   // 전체 목록
   getCommunityList: (state, action) => {},
   getCommunityListSuccess: (state, action) => {

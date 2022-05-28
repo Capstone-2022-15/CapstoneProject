@@ -17,17 +17,48 @@ import { communityActions } from "../slices/communitySlice";
 
 const SECOND = 1000;
 
-function apiPostCommunityAccess(req) {
-  return axios.post(`api/community`, req);
+const token = window.localStorage.getItem("accessToken");
+
+function apiGetCommunityAccess() {
+  const access = axios.get(`api/community`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  return access;
 }
 
 function apiGetCommunityList() {
-  return axios.get(`api/community`);
+  axios
+    .get(`api/community`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      // 실 데이터 받는 부분, 새 토큰 리프레시
+      console.log(res);
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        axios.get(`api/community`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+      }
+      return res.data;
+    });
 }
 
 function apiGetCommunityBoard(params) {
   return axios.get(
-    `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}` // 진짜 이 방식 뿐인가? 너무 추하다.
+    `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`
+    // {
+    //   headers: {
+    //     Authorization: window.localStorage.getItem("accessToken"),
+    //   },
+    // } // 진짜 이 방식 뿐인가? 너무 추하다.
   );
 }
 
@@ -39,23 +70,12 @@ function apiGetCommunityBoard(params) {
 //   return axios.get(`api/community/${communityId}/comments`);
 // }
 
-function* asyncPostCommunityAccess() {
-  try {
-    const response = yield call(apiPostCommunityAccess);
-    if (response?.status === 200) {
-      yield put(communityActions.postCommunityAccess(response));
-    } else {
-      yield put(communityActions.postCommunityFailure(response));
-    }
-  } catch (e) {
-    console.error(e);
-    yield put(communityActions.postCommunityFailure(e.response));
-  }
-}
-
 function* asyncGetCommunityList() {
   try {
-    const response = yield call(apiGetCommunityList);
+    const response = yield call(apiGetCommunityAccess);
+    const response1 = yield call(apiGetCommunityList);
+    console.log(response);
+    console.log(response1);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityListSuccess(response));
     } else {
@@ -105,13 +125,6 @@ function* asyncGetCommunityBoard(action) {
 //   }
 // }
 
-function* watchPostCommunityAccess() {
-  while (true) {
-    const action = yield take(communityActions.postCommunityAccess);
-    yield call(asyncPostCommunityAccess, action);
-  }
-}
-
 function* watchGetCommunityList() {
   while (true) {
     const action = yield take(communityActions.getCommunityList);
@@ -156,7 +169,6 @@ function* watchGetCommunityBoard() {
 
 export default function* communitySaga() {
   yield all([
-    fork(watchPostCommunityAccess),
     fork(watchGetCommunityList),
     fork(watchGetCommunityBoard),
     // fork(watchUpdateCommunityViews),

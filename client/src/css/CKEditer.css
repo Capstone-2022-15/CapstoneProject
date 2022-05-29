@@ -1,0 +1,21 @@
+/* .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 400px;
+  margin-bottom: 20px;
+} */
+
+.form-input {
+  width: 1000px;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+/*Textbox*/
+.ck-editor__editable {
+  min-height: 500px;
+  max-height: 500px;
+  min-width: 300px;
+}
+/*Toolbar*/
+.ck-editor__top {
+  min-width: 300px;
+}

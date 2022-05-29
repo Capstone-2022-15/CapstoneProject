@@ -6,13 +6,14 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
+import "../css/CKEditer.css";
 
 function Community() {
   const [inline, setInline] = useState({
     title: "",
     content: "",
   });
-  const [viewContent, setViewContent] = useState([]);
+  const [viewContent, setViewContent] = useState([]); // 적힌 내용 저장
 
   // js는 직접 수정X -> 복사 수정
   const getValue = (e) => {
@@ -24,11 +25,15 @@ function Community() {
     console.log(name.value);
   };
 
+  const onSubmitHandler = () => {
+    setViewContent(viewContent.concat({ ...inline }));
+  };
+
   return (
     <>
       <Header />
       <h1>커뮤니티</h1>
-      <div>
+      <div className="form-input">
         <input
           className="title-input"
           type="text"
@@ -38,7 +43,8 @@ function Community() {
         />
         <CKEditor
           editor={ClassicEditor}
-          data="<p>Hello from CKEditor 5!</p>"
+          config={{ placeholder: "내용을 입력하세요" }}
+          data="<p></p>"
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!", editor);
@@ -50,16 +56,23 @@ function Community() {
               ...inline,
               content: data,
             });
+            console.log(inline);
           }}
-          onBlur={(event, editor) => {
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log("Focus.", editor);
-          }}
+          // onBlur={(event, editor) => {
+          //   console.log("Blur.", editor);
+          // }}
+          // onFocus={(event, editor) => {
+          //   console.log("Focus.", editor);
+          // }}
         />
+        <button
+          type="submit"
+          className="submit-button"
+          onClick={onSubmitHandler}
+        >
+          등록
+        </button>
       </div>
-      <button className="submit-button">입력</button>
     </>
   );
 }

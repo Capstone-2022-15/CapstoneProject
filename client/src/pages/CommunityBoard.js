@@ -12,17 +12,20 @@ import Header from "../components/HeaderDom";
 
 function CommunityBoard() {
   const params = useParams();
-  const { community, status, statusText } = useSelector(
+  const { communityBoard, status, statusText, param } = useSelector(
     (state) => state.communityReducer
   );
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(communityActions.getCommunityBoard(params?.id ?? 0));
-  }, [dispatch, params?.id]);
+    const take = dispatch(communityActions.getCommunityBoard(params));
+    console.log(take);
+  }, [dispatch, params]);
 
-  console.log(params?.id);
-  console.log(community.data);
+  console.log(communityBoard.data);
+  console.log(param);
+
+  const board = communityBoard.data;
 
   return (
     <>
@@ -30,11 +33,11 @@ function CommunityBoard() {
       <h1>커뮤니티</h1>
       {status === 200 ? (
         <div>
-          {community.data.map((board) => (
-            <div key={board.idx}>
-              <span>{board.content}</span>
-            </div>
-          ))}
+          <div key={board.idx}>
+            <h2>{board.subject}</h2>
+            <hr />
+            <span>{board.content}</span>
+          </div>
         </div>
       ) : (
         <div>

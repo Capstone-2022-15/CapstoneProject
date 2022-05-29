@@ -15,7 +15,7 @@ import { all, call, fork, put, take, retry } from "redux-saga/effects";
 import qs from "query-string";
 import { communityActions } from "../slices/communitySlice";
 
-const SECOND = 1000;
+// const SECOND = 1000;
 
 const token = window.localStorage.getItem("accessToken");
 
@@ -25,11 +25,10 @@ function apiGetCommunityAccess() {
       Authorization: token,
     },
   });
-
   return access;
 }
 
-function apiGetCommunityList() {
+function apiGetCommunity() {
   axios
     .get(`api/community`, {
       headers: {
@@ -51,52 +50,75 @@ function apiGetCommunityList() {
     });
 }
 
-function apiGetCommunityBoard(params) {
-  return axios.get(
-    `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`
-    // {
-    //   headers: {
-    //     Authorization: window.localStorage.getItem("accessToken"),
-    //   },
-    // } // 진짜 이 방식 뿐인가? 너무 추하다.
+function apiGetCommunityBoardAccess(params) {
+  const access = axios.get(
+    `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
   );
+  return access;
 }
 
-// function apiPutCommunity(request) {
-//   return axios.put(`api/community/${request?.idx}`, request);
-// }
+function apiGetCommunityBoard(params) {
+  axios
+    .get(`api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      // 실 데이터 받는 부분, 새 토큰 리프레시
+      console.log(res);
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        axios.get(
+          `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+      }
+      return res.data;
+    });
+}
 
 // function apiGetCommunityComments(communityId) {
 //   return axios.get(`api/community/${communityId}/comments`);
 // }
 
-function* asyncGetCommunityList() {
+function* asyncGetCommunity() {
   try {
     const response = yield call(apiGetCommunityAccess);
-    const response1 = yield call(apiGetCommunityList);
+    const response1 = yield call(apiGetCommunity);
     console.log(response);
     console.log(response1);
     if (response?.status === 200) {
-      yield put(communityActions.getCommunityListSuccess(response));
+      yield put(communityActions.getCommunitySuccess(response));
     } else {
-      yield put(communityActions.getCommunityListFail(response));
+      yield put(communityActions.getCommunityFail(response));
     }
   } catch (e) {
     console.error(e);
-    yield put(communityActions.getCommunityListFail(e.response));
+    yield put(communityActions.getCommunityFail(e.response));
   }
 }
 
 function* asyncGetCommunityBoard(action) {
   try {
-    const response = yield retry(5, 10 * SECOND, apiGetCommunityBoard, {
-      idx: action.payload,
-    });
-    console.log(response);
+    // const response = yield retry(3, 10 * SECOND, apiGetCommunityBoard, {
+    //   idx: action.payload,
+    // });
+    const response = yield call(apiGetCommunityBoardAccess, action.payload.id);
+    const response1 = yield call(apiGetCommunityBoard, action.payload.id);
     console.log(action.payload);
+    console.log(response);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityBoardSuccess(response));
-      // yield put(communityActions.updateCommunityViews(response.data));
     } else {
       yield put(communityActions.getCommunityBoardFail(response));
     }
@@ -125,10 +147,10 @@ function* asyncGetCommunityBoard(action) {
 //   }
 // }
 
-function* watchGetCommunityList() {
+function* watchGetCommunity() {
   while (true) {
-    const action = yield take(communityActions.getCommunityList);
-    yield call(asyncGetCommunityList, action);
+    const action = yield take(communityActions.getCommunity);
+    yield call(asyncGetCommunity, action);
   }
 }
 
@@ -169,7 +191,7 @@ function* watchGetCommunityBoard() {
 
 export default function* communitySaga() {
   yield all([
-    fork(watchGetCommunityList),
+    fork(watchGetCommunity),
     fork(watchGetCommunityBoard),
     // fork(watchUpdateCommunityViews),
   ]);

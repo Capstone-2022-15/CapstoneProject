@@ -3,38 +3,42 @@ import { createSlice } from "@reduxjs/toolkit";
 const name = "community";
 
 const initialState = {
-  communityList: [],
   community: [],
+  communityBoard: [],
   communityComments: {},
   status: 0,
   statusText: "Loading",
+  param: 0,
 };
 
 const reducers = {
   // 전체 목록
-  getCommunityList: (state, action) => {},
-  getCommunityListSuccess: (state, action) => {
-    state.communityList = action.payload?.data ?? [];
+  getCommunity: (state, action) => {},
+  getCommunitySuccess: (state, action) => {
+    state.community = action.payload?.data ?? [];
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },
-  getCommunityListFail: (state, action) => {
-    state.communityList = initialState.communityList;
+  getCommunityFail: (state, action) => {
+    state.community = initialState.community;
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";
   },
 
   // 내용
-  getCommunityBoard: (state, action) => {},
+  getCommunityBoard: (state, action) => {
+    state.param = action.payload;
+  },
   getCommunityBoardSuccess: (state, action) => {
-    state.community = action.payload?.data ?? [];
+    state.communityBoard = action.payload?.data ?? [];
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },
   getCommunityBoardFail: (state, action) => {
-    state.community = initialState.communityList;
+    state.communityBoard = initialState.communityBoard;
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";
+    state.param = initialState.param;
   },
 
   // updateCommunity: (state, action) => {},

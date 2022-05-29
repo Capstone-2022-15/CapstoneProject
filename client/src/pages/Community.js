@@ -5,28 +5,30 @@ import { Link } from "react-router-dom";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
+import Notice from "../components/Notice";
 
 function Community() {
-  const { communityList, status, statusText } = useSelector(
+  const { community, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
-  console.log(communityList);
+  console.log(community);
   console.log(status);
   console.log(statusText);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    setTimeout(() => dispatch(communityActions.getCommunityList()), 200);
+    setTimeout(() => dispatch(communityActions.getCommunity()), 200);
   }, [dispatch]);
 
   return (
     <>
       <Header />
       <h1>커뮤니티</h1>
-      {/* 에러 분기 */}
       {status === 200 ? (
         <div>
-          <ul>
+          <Notice outsideJson={community} />
+          <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
+          {/* <ul>
             {Object.keys(communityList).length > 1 ? (
               communityList &&
               communityList.data.map((board) => (
@@ -53,7 +55,7 @@ function Community() {
               <div> 게시판이 없습니다. </div>
             )}
           </ul>
-          <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
+          <Link to={{ pathname: `/community/write` }}>글쓰기</Link> */}
         </div>
       ) : (
         <div>

@@ -1,4 +1,7 @@
-import "./Notice.css";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
@@ -10,26 +13,19 @@ import TableContainer from "@material-ui/core/TableContainer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { Typography } from "@material-ui/core";
-import React from "react";
+import { object } from "prop-types";
 
 // 파라미터 추가시키기
-export const Notice = () => {
-  const [page, setPage] = React.useState(1);
+export const Notice = ({ outsideJson }) => {
+  const [page, setPage] = useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
 
-  const noticeData = require("./NoticeData.json");
-  let song = [];
-  for (let i in noticeData) {
-    song.push(noticeData[i]);
-  }
+  const noticeData = outsideJson;
+  console.log(noticeData);
+  console.log(noticeData.data.length);
 
-  song.map((i) => {
-    console.log(i.first_name);
-  });
-
-  // console.log(noticeData);
   return (
     <div>
       <TableContainer component={Paper}>
@@ -43,17 +39,30 @@ export const Notice = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {noticeData.noticeData.map(
-              (n, index) =>
-                (page - 1) * 10 <= index &&
-                index < page * 10 && (
-                  <TableRow>
-                    <TableCell>{n.id}</TableCell>
-                    <TableCell>{n.first_name}</TableCell>
-                    <TableCell>{n.last_name}</TableCell>
-                    <TableCell>{n.email}</TableCell>
-                  </TableRow>
-                )
+            {noticeData.data.length > 1 ? (
+              noticeData &&
+              noticeData.data.map(
+                (board, index) =>
+                  (page - 1) * 10 <= index &&
+                  index < page * 10 && (
+                    <TableRow key={board.idx}>
+                      <TableCell>{board.idx}</TableCell>
+                      <TableCell>
+                        <Link
+                          to={{
+                            pathname: `/community/${board.idx}`,
+                          }}
+                        >
+                          {board.subject}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{board.writer}</TableCell>
+                      <TableCell>{board.createDate}</TableCell>
+                    </TableRow>
+                  )
+              )
+            ) : (
+              <div>게시판이 없습니다.</div>
             )}
           </TableBody>
         </Table>
@@ -71,4 +80,5 @@ export const Notice = () => {
     </div>
   );
 };
+
 export default Notice;

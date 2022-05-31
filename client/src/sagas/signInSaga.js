@@ -32,6 +32,7 @@ function* asyncPostSignIn(action) {
     if (response?.status === 200 && response.data.token != null) {
       // 통신 성공하고 토큰을 받았을 때만 성공 처리, 토큰 검증 방법 넣기 전까진 != null 임시로
       yield put(signInActions.signInSuccess(response));
+      yield call(window.location.reload());
     } else {
       yield put(signInActions.signInFailure(response));
     }

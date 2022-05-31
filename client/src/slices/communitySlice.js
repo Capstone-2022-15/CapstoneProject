@@ -13,7 +13,10 @@ const initialState = {
 
 const reducers = {
   // 전체 목록
-  getCommunity: (state, action) => {},
+  getCommunity: (state, action) => {
+    state.community = action.payload?.data ?? [];
+    state.status = action.payload?.status ?? 500;
+  },
   getCommunitySuccess: (state, action) => {
     state.community = action.payload?.data ?? [];
     state.status = action.payload?.status;
@@ -27,6 +30,8 @@ const reducers = {
 
   // 내용
   getCommunityBoard: (state, action) => {
+    state.communityBoard = action.payload?.data ?? [];
+    state.status = action.payload?.status ?? 500;
     state.param = action.payload;
   },
   getCommunityBoardSuccess: (state, action) => {
@@ -39,6 +44,17 @@ const reducers = {
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";
     state.param = initialState.param;
+  },
+
+  // 글 쓰기
+  postCommunityWrite: (state, action) => {},
+  postCommunityWriteSuccess: (state, action) => {
+    state.status = action.payload?.status;
+    state.statusText = action.payload?.statusText ?? "Success";
+  },
+  postCommunityWriteFailure: (state, action) => {
+    state.status = action.payload?.status ?? 500;
+    state.statusText = action.payload?.statusText ?? "Network Error";
   },
 
   // updateCommunity: (state, action) => {},

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -22,9 +22,12 @@ export const Notice = ({ outsideJson }) => {
     setPage(value);
   };
 
-  const noticeData = outsideJson;
-  console.log(noticeData);
-  console.log(noticeData.data.length);
+  const [noticeData, setNoticeData] = useState({ data: {}, status: 0 });
+  useEffect(() => {
+    setTimeout(() => setNoticeData(outsideJson), 200);
+  }, [outsideJson]);
+  console.log("noticeData: ", noticeData);
+  // console.log(noticeData.data.length);
 
   return (
     <div>
@@ -62,7 +65,9 @@ export const Notice = ({ outsideJson }) => {
                   )
               )
             ) : (
-              <div>게시판이 없습니다.</div>
+              <TableRow>
+                <TableCell>게시판이 없습니다.</TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

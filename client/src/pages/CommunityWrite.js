@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { communityActions } from "../slices/communitySlice";
@@ -10,12 +10,17 @@ import "../css/CKEditer.css";
 
 function Community() {
   const [inline, setInline] = useState({
-    title: "",
+    subject: "",
     content: "",
+    writer: "",
+    writer_nick: null,
+    startdate: null,
+    finaldate: null,
+    password: null,
   });
   const [viewContent, setViewContent] = useState([]); // 적힌 내용 저장
 
-  // js는 직접 수정X -> 복사 수정
+  // js는 직접 수정X -> 복사 수정, 형식 비슷하면 광범위한 사용 가능
   const getValue = (e) => {
     const { name, value } = e.target;
     setInline({
@@ -25,8 +30,12 @@ function Community() {
     console.log(name.value);
   };
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onSubmitHandler = () => {
     setViewContent(viewContent.concat({ ...inline }));
+    dispatch(communityActions.postCommunityWrite(viewContent));
+    // navigate("/community");
   };
 
   return (
@@ -35,11 +44,18 @@ function Community() {
       <h1>커뮤니티</h1>
       <div className="form-input">
         <input
-          className="title-input"
+          className="inside title-input"
           type="text"
           placeholder="제목"
           onChange={getValue}
-          name="title"
+          name="subject"
+        />
+        <input
+          className="inside pw-input"
+          type="password"
+          placeholder="입력한 암호는 글 삭제 시 사용됩니다"
+          onChange={getValue}
+          name="password"
         />
         <CKEditor
           editor={ClassicEditor}

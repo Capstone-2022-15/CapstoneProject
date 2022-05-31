@@ -15,11 +15,12 @@ import { all, call, fork, put, take, retry } from "redux-saga/effects";
 import qs from "query-string";
 import { communityActions } from "../slices/communitySlice";
 
-// const SECOND = 1000;
-
+const SECOND = 1000;
 const token = window.localStorage.getItem("accessToken");
 
+//----------------------------------------------------------
 function apiGetCommunityAccess() {
+  // 이걸로 표를 출력, 재발급하면 표 대신 토큰을 뱉는 이유?
   const access = axios.get(`api/community`, {
     headers: {
       Authorization: token,
@@ -37,15 +38,20 @@ function apiGetCommunity() {
     })
     .then((res) => {
       // 실 데이터 받는 부분, 새 토큰 리프레시
-      console.log(res);
+      console.log("res.data.token: ", res.data.token);
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
-        axios.get(`api/community`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        console.log("token: ", token);
+        // const access = axios.get(`api/community`, {
+        //   headers: {
+        //     Authorization: token,
+        //   },
+        // });
+        // console.log("access: ", access);
+        // return access;
+        apiGetCommunityAccess();
       }
+      console.log("res.data: ", res.data);
       return res.data;
     });
 }
@@ -70,33 +76,77 @@ function apiGetCommunityBoard(params) {
       },
     })
     .then((res) => {
-      // 실 데이터 받는 부분, 새 토큰 리프레시
       console.log(res);
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
-        axios.get(
-          `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
+        // return axios.get(
+        //   `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
+        //   {
+        //     headers: {
+        //       Authorization: token,
+        //     },
+        //   }
+        // );
+        apiGetCommunityBoardAccess(params);
       }
       return res.data;
     });
 }
 
-// function apiGetCommunityComments(communityId) {
-//   return axios.get(`api/community/${communityId}/comments`);
+// function apiGetCommunityCommentsAccess(params) {
+//   const access = axios.get(
+//     `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}/comments`,
+//     {
+//       headers: {
+//         Authorization: token,
+//       },
+//     }
+//   );
+//   return access;
 // }
 
+// function apiGetCommunityComments(params) {
+//   axios
+//     .get(
+//       `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}/comments`,
+//       {
+//         headers: {
+//           Authorization: token,
+//         },
+//       }
+//     )
+//     .then((res) => {
+//       console.log(res);
+//       if (res.data.token) {
+//         window.localStorage.setItem("accessToken", res.data.token);
+//         return axios.get(
+//           `api/community/${qs
+//             .stringify(params)
+//             .replace(/[^0-9]/g, "")}/comments`,
+//           {
+//             headers: {
+//               Authorization: token,
+//             },
+//           }
+//         );
+//       } else {
+//         return res.data;
+//       }
+//     });
+// }
+
+function apiPostCommunityWrite(requestBody) {
+  const access = axios.post(`api/community`, requestBody);
+  return access;
+}
+
+//-------------------------------------------
 function* asyncGetCommunity() {
   try {
     const response = yield call(apiGetCommunityAccess);
     const response1 = yield call(apiGetCommunity);
-    console.log(response);
-    console.log(response1);
+    console.log("response: ", response);
+    console.log("response1: ", response1);
     if (response?.status === 200) {
       yield put(communityActions.getCommunitySuccess(response));
     } else {
@@ -110,13 +160,17 @@ function* asyncGetCommunity() {
 
 function* asyncGetCommunityBoard(action) {
   try {
-    // const response = yield retry(3, 10 * SECOND, apiGetCommunityBoard, {
-    //   idx: action.payload,
-    // });
+    // const response = yield retry(
+    //   3,
+    //   1 * SECOND,
+    //   apiGetCommunityBoardAccess,
+    //   action.payload.id
+    // );
     const response = yield call(apiGetCommunityBoardAccess, action.payload.id);
     const response1 = yield call(apiGetCommunityBoard, action.payload.id);
-    console.log(action.payload);
-    console.log(response);
+    console.log("action.payload: ", action.payload);
+    console.log("response: ", response);
+    console.log("response1: ", response1);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityBoardSuccess(response));
     } else {
@@ -128,25 +182,26 @@ function* asyncGetCommunityBoard(action) {
   }
 }
 
-// // 조회수 늘리기
-// function* asyncUpdateCommunityViews(action) {
-//   try {
-//     const response = yield call(apiPutCommunity, {
-//       ...action.payload,
-//       hit: parseInt(action.payload?.hit ?? 0) + 1,
-//       updateDate: Date.now(),
-//     });
-//     if (response?.status === 200) {
-//       yield put(communityActions.updateCommunityViewsSuccess(response));
-//     } else {
-//       yield put(communityActions.updateCommunityViewsFail(response));
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     yield put(communityActions.updateCommunityViewsFail(e.response));
-//   }
-// }
+function* asyncPostCommunityWrite(action) {
+  try {
+    const response = yield call(apiPostCommunityWrite, { ...action.payload });
+    console.log("action.payload: ", action.payload);
+    if (response?.status === 201) {
+      yield put(communityActions.postCommunityWriteSuccess(response));
+    } else {
+      yield put(communityActions.postCommunityWriteFailure(response));
+      yield alert(`등록 실패: ${response?.status}, ${response?.statusText}`);
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(communityActions.postCommunityWriteFailure(e.response));
+    yield alert(
+      `등록 실패: ${e?.response?.status}, ${e?.response?.statusText}`
+    );
+  }
+}
 
+//---------------------------------------------------------------------
 function* watchGetCommunity() {
   while (true) {
     const action = yield take(communityActions.getCommunity);
@@ -160,13 +215,6 @@ function* watchGetCommunityBoard() {
     yield call(asyncGetCommunityBoard, action);
   }
 }
-
-// function* watchUpdateCommunityViews() {
-//   while (true) {
-//     const action = yield take(communityActions.updateCommunityViews);
-//     yield call(asyncUpdateCommunityViews, action);
-//   }
-// }
 
 // function* asyncGetCommunityComments() {
 //   try {
@@ -189,10 +237,19 @@ function* watchGetCommunityBoard() {
 //   }
 // }
 
+function* watchPostCommunityWrite() {
+  while (true) {
+    const action = yield take(communityActions.postCommunityWrite);
+    yield call(asyncPostCommunityWrite, action);
+  }
+}
+
+//------------------------------------------------------
 export default function* communitySaga() {
   yield all([
     fork(watchGetCommunity),
     fork(watchGetCommunityBoard),
     // fork(watchUpdateCommunityViews),
+    fork(watchPostCommunityWrite),
   ]);
 }

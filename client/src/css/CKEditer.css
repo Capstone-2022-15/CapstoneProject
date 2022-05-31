@@ -3,6 +3,15 @@
   margin-bottom: 20px;
 } */
 
+.inside {
+  width: 500px;
+  min-width: 200px;
+}
+
+.inside:focus {
+  outline: none;
+}
+
 .form-input {
   width: 1000px;
   display: table;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { communityActions } from "../slices/communitySlice";
@@ -11,13 +11,13 @@ function Community() {
   const { community, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
-  console.log(community);
-  console.log(status);
-  console.log(statusText);
+  console.log("community: ", community);
+  console.log("status: ", status);
+  console.log("statusText: ", statusText);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    setTimeout(() => dispatch(communityActions.getCommunity()), 200);
+  useLayoutEffect(() => {
+    dispatch(communityActions.getCommunity());
   }, [dispatch]);
 
   return (

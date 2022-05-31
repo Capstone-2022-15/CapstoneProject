@@ -4,11 +4,15 @@ import logger from "redux-logger";
 import rootReducer from "../rootReducer";
 import rootSaga from "../rootSaga";
 import history from "./history";
+// import { loadState, saveState } from "./localStorage";
 
 const sagaMiddleware = createSagaMiddleware({
   context: { history: history },
 });
-const initialState = {};
+const initialState = {
+  // token: "",
+};
+// const presistedState = loadState();
 
 const store = configureStore({
   reducer: rootReducer,
@@ -16,6 +20,10 @@ const store = configureStore({
   devTools: true,
   preloadedState: initialState,
 });
+
+// store.subscribe(() => {
+//   saveState({ ...presistedState, access_token: store.getState().auth.token });
+// });
 
 sagaMiddleware.run(rootSaga);
 

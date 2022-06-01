@@ -23,12 +23,8 @@ function apiLogOut(req) {
 //-------------------------------------
 function* asyncPostSignIn(action) {
   try {
-    const response = yield call(apiPostSignIn, {
-      ...action.payload,
-    });
-    const response2 = yield call(apiPostToken, {
-      ...action.payload,
-    });
+    const response = yield call(apiPostSignIn, { ...action.payload });
+    const response2 = yield call(apiPostToken, { ...action.payload });
     if (response?.status === 200 && response.data.token != null) {
       // 통신 성공하고 토큰을 받았을 때만 성공 처리, 토큰 검증 방법 넣기 전까진 != null 임시로
       yield put(signInActions.signInSuccess(response));

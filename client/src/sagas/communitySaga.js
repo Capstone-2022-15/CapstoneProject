@@ -38,17 +38,8 @@ function apiGetCommunity() {
     })
     .then((res) => {
       // 실 데이터 받는 부분, 새 토큰 리프레시
-      console.log("res.data.token: ", res.data.token);
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
-        console.log("token: ", token);
-        // const access = axios.get(`api/community`, {
-        //   headers: {
-        //     Authorization: token,
-        //   },
-        // });
-        // console.log("access: ", access);
-        // return access;
         apiGetCommunityAccess();
       }
       console.log("res.data: ", res.data);
@@ -79,14 +70,6 @@ function apiGetCommunityBoard(params) {
       console.log(res);
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
-        // return axios.get(
-        //   `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
-        //   {
-        //     headers: {
-        //       Authorization: token,
-        //     },
-        //   }
-        // );
         apiGetCommunityBoardAccess(params);
       }
       return res.data;
@@ -135,9 +118,29 @@ function apiGetCommunityBoard(params) {
 //     });
 // }
 
-function apiPostCommunityWrite(requestBody) {
-  const access = axios.post(`api/community`, requestBody);
+function apiPostCommunityWriteAccess(req) {
+  const access = axios.post(`api/community`, req, {
+    headers: {
+      Authorization: token,
+    },
+  });
   return access;
+}
+
+function apiPostCommunityWrite(req) {
+  axios
+    .post(`api/community`, req, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        apiPostCommunityWriteAccess(req);
+      }
+      return res.data;
+    });
 }
 
 //-------------------------------------------
@@ -146,9 +149,9 @@ function* asyncGetCommunity() {
     const response = yield call(apiGetCommunityAccess);
     const response1 = yield call(apiGetCommunity);
     console.log("response: ", response);
-    console.log("response1: ", response1);
     if (response?.status === 200) {
       yield put(communityActions.getCommunitySuccess(response));
+      if (response.data.token) window.location.reload(true); // 토큰 발생 시 서버에서 새로고침
     } else {
       yield put(communityActions.getCommunityFail(response));
     }
@@ -160,19 +163,13 @@ function* asyncGetCommunity() {
 
 function* asyncGetCommunityBoard(action) {
   try {
-    // const response = yield retry(
-    //   3,
-    //   1 * SECOND,
-    //   apiGetCommunityBoardAccess,
-    //   action.payload.id
-    // );
     const response = yield call(apiGetCommunityBoardAccess, action.payload.id);
     const response1 = yield call(apiGetCommunityBoard, action.payload.id);
     console.log("action.payload: ", action.payload);
     console.log("response: ", response);
-    console.log("response1: ", response1);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityBoardSuccess(response));
+      if (response.data.token) window.location.reload(true);
     } else {
       yield put(communityActions.getCommunityBoardFail(response));
     }
@@ -184,7 +181,10 @@ function* asyncGetCommunityBoard(action) {
 
 function* asyncPostCommunityWrite(action) {
   try {
-    const response = yield call(apiPostCommunityWrite, { ...action.payload });
+    const response = yield call(apiPostCommunityWriteAccess, {
+      ...action.payload,
+    });
+    const response1 = yield call(apiPostCommunityWrite, { ...action.payload });
     console.log("action.payload: ", action.payload);
     if (response?.status === 201) {
       yield put(communityActions.postCommunityWriteSuccess(response));

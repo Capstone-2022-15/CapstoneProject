@@ -27,7 +27,6 @@ function Community() {
       {status === 200 ? (
         <div>
           <Notice outsideJson={community} />
-          <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
           {/* <ul>
             {Object.keys(communityList).length > 1 ? (
               communityList &&
@@ -67,6 +66,7 @@ function Community() {
           </div>
         </div>
       )}
+      <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
     </>
   );
 }

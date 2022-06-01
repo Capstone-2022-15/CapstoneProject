@@ -12,7 +12,7 @@ function Community() {
   const [inline, setInline] = useState({
     subject: "",
     content: "",
-    writer: "",
+    writer: "aaa",
     writer_nick: null,
     startdate: null,
     finaldate: null,
@@ -35,7 +35,7 @@ function Community() {
   const onSubmitHandler = () => {
     setViewContent(viewContent.concat({ ...inline }));
     dispatch(communityActions.postCommunityWrite(viewContent));
-    // navigate("/community");
+    setTimeout(() => navigate("/community", { replace: true }), 200);
   };
 
   return (

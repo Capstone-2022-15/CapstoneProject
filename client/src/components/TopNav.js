@@ -5,11 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import Calendar from './Calendar/Calendar';
-import Notice from './Notice/Notice';
 import { withStyles } from "@material-ui/styles";
-import { Paper } from '@material-ui/core';
-import { relativeTimeRounding } from 'moment';
+import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 
 const styles = theme => ({
   nav:{
@@ -23,31 +20,12 @@ const styles = theme => ({
 
 
 const ResponsiveAppBar = () =>{
+
+
+
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
     
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () =>{
-        setAnchorElUser(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
-    const openCalendar = () => {
-        document.getElementById("tx").textContent="학사일정";
-    };
-  
-  
-
     return (
       <div>
         <AppBar position="static">
@@ -57,61 +35,68 @@ const ResponsiveAppBar = () =>{
                 variant="h5"
                 component="div"
               >
-                제주대학교 게시판
+                <Link to="/" style={{textDecoration:'none', background:"#3f51b5", color:"#fff", fontSize:"25px"}}>
+                 제주대학교 게시판
+                </Link>
               </Typography>
-              <Box sx={{ flexGrow: 1,  display: { xs: 'none', md: 'flex' }, justifyContent : 'space-around', }}>
-                <Button
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color:"#fff",
-                      fontSize: "18px"
-                    }}
-                    varint = "contained"
-                    onClick={handleCloseNavMenu}
-                    >
-                  공지사항
-                </Button>
-
-                <Button
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color:"#fff",
-                      fontSize: "18px"
-                    }}
-                    varint = "contained"
-                    onClick={openCalendar}
-                    >
-                  학사일정
-                </Button>
-                <Button
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color:"#fff",
-                      fontSize: "18px"
-                    }}
-                    varint = "contained"
-                    onClick={handleCloseNavMenu}
-                    >
-                  장학정보
-                </Button>
-                <Button
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color:"#fff",
-                      fontSize: "18px"
-                    }}
-                    varint = "contained"
-                    onClick={handleCloseNavMenu}
-                    >
-                  커뮤니티
-                </Button>
-              </Box>
+              <Box sx={{ 
+                        flexGrow: 1,  
+                        display: { xs: 'none', md: 'flex' }, 
+                        justifyContent : 'space-around', 
+                        }}>
+                        <Link to ="/TopNav/Notice" style={{textDecoration:'none'}}>
+                            <Button
+                                style={{
+                                backgroundColor: "#3f51b5",
+                                color:"#fff",
+                                fontSize: "18px"
+                                }}
+                                varint = "contained"
+                                >
+                            공지사항
+                            </Button>
+                        </Link>
+                        <Link to ="/TopNav/Schedule" style={{textDecoration:'none'}}>
+                            <Button
+                                style={{
+                                backgroundColor: "#3f51b5",
+                                color:"#fff",
+                                fontSize: "18px"
+                                }}
+                                varint = "contained"
+                                >
+                            학사일정
+                            </Button>
+                        </Link>
+                        <Link to ="/TopNav/Scholarship" style={{textDecoration:'none'}}>
+                            <Button
+                                style={{
+                                backgroundColor: "#3f51b5",
+                                color:"#fff",
+                                fontSize: "18px"
+                                }}
+                                varint = "contained"
+                                >
+                            장학정보
+                            </Button>
+                        </Link>
+                        <Link to ="/TopNav/Community" style={{textDecoration:'none'}}>
+                            <Button
+                                style={{
+                                backgroundColor: "#3f51b5",
+                                color:"#fff",
+                                fontSize: "18px"
+                                }}
+                                varint = "contained"
+                                >
+                            커뮤니티
+                            </Button>
+                        </Link>
+                    </Box>
             </Toolbar>
           </Container>
         </AppBar>
-        <div >
-          <Notice/>
-        </div>
+
 
         </div>
       );

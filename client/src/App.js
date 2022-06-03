@@ -9,11 +9,13 @@ import Calendar from './components/Calendar/Calendar.js';
 import Scholarship from './components/Scholarship/Scholarship.js';
 import Community from './components/Community/Community.js';
 import Home from './components/Home.js';
+import FullCalendar from './components/FullCalendar.js';
 
 function App(){
     return(
+        
         <div>
-            <BrowserRouter>
+            {/* <BrowserRouter>
 
             <Routes>
                     <Route path="/TopNav/*" element={<TopNav/>}></Route>
@@ -29,7 +31,13 @@ function App(){
                     <Route path="/TopNav/Scholarship" element={<Scholarship/>}></Route>
                     <Route path="/TopNav/Community" element={<Community/>}></Route>
                 </Routes>
-          </BrowserRouter>        
+          </BrowserRouter>         */}
+
+          {/* FullCalendar 구현 */}
+          <BrowserRouter>
+              <TopNav/>
+                <FullCalendar/>
+        </BrowserRouter>
         </div>
     );
 }

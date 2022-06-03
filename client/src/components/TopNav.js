@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { withStyles } from "@material-ui/styles";
 import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const styles = theme => ({
   nav:{
@@ -93,6 +94,15 @@ const ResponsiveAppBar = () =>{
                             </Button>
                         </Link>
                     </Box>
+                    <Typography
+                    variant="h7"
+                    component="div"
+                    style={{margin:"Left"}}
+                    >
+                      <Link to ="/" style={{textDecoration:'none', background:"#3f51b5", color:"#fff", fontSize:"25px"}}>
+                        <LogoutIcon/>
+                      </Link>
+                    </Typography>
             </Toolbar>
           </Container>
         </AppBar>

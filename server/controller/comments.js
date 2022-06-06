@@ -11,11 +11,7 @@ exports.show = async (req, res) => {
       sql = `SELECT C.idx, C.member_id, C.member_nick, C.createDate, C.updateDate, C.content FROM comments as C WHERE C.ref = ? AND C.isDeleted = 0 ORDER BY C.idx ASC`;
       let params = [req.params.id];
       [rows, fields] = await connection.query(sql, params);
-      if (rows[0]) {
-        res.status(200).json({ status: "200", data: rows });
-      } else {
-        res.status(200).json({ status: "200", message: "Nothing :)" });
-      }
+      res.status(200).json({ status: "200", data: rows });
     } else {
       res.status(404).json({ status: "404", message: "Wrong URL" });
     }

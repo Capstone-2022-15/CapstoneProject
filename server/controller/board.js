@@ -6,16 +6,12 @@ exports.showAll = async (req, res) => {
   try {
     let data = [];
     const connection = await getConnection();
-    for(i=1;i<5;i++){
+    for (i = 1; i < 5; i++) {
       sql = `SELECT A.idx, A.config_idx, A.subject FROM board as A WHERE A.config_idx = ${i} AND A.isDeleted = 0 ORDER BY A.idx DESC LIMIT 5`;
       [rows, fields] = await connection.query(sql);
       data.push(rows);
     }
-    if (data !== []) {
-      res.status(200).json({ status: "200", data: data });
-    } else {
-      res.status(200).json({ status: "200", message: "Nothing :)" });
-    }
+    res.status(200).json({ status: "200", data: data });
   } catch (error) {
     console.log(error);
     res.status(400).json({ status: "400", message: error.message });
@@ -33,11 +29,7 @@ exports.show = async (req, res) => {
       const config_idx = rows[0].idx;
       sql = `SELECT A.idx, A.config_idx, A.subject, A.content, A.writer, A.writer_nick, A.createDate, A.updateDate, A.hit, A.reply FROM board as A WHERE A.config_idx = ? AND A.isDeleted = 0 ORDER BY A.idx DESC`;
       [rows, fields] = await connection.query(sql, config_idx);
-      if (rows[0]) {
-        res.status(200).json({ status: "200", data: rows });
-      } else {
-        res.status(200).json({ status: "200", message: "Nothing :)" });
-      }
+      res.status(200).json({ status: "200", data: rows });
     } else {
       res.status(404).json({ status: "404", message: "Wrong URL" });
     }

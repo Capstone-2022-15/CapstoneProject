@@ -6,6 +6,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
+import useDidMountEffect from "../components/useDidMountEffect";
 import "../css/CKEditer.css";
 
 function Community() {
@@ -18,7 +19,7 @@ function Community() {
     finaldate: null,
     password: null,
   });
-  const [viewContent, setViewContent] = useState([]); // 적힌 내용 저장
+  const [viewContent, setViewContent] = useState(() => []); // 적힌 내용 저장
 
   // js는 직접 수정X -> 복사 수정, 형식 비슷하면 광범위한 사용 가능
   const getValue = (e) => {
@@ -27,16 +28,23 @@ function Community() {
       ...inline,
       [name]: value,
     });
-    console.log(name.value);
   };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onSubmitHandler = () => {
-    setViewContent(viewContent.concat({ ...inline }));
     dispatch(communityActions.postCommunityWrite(viewContent));
-    setTimeout(() => navigate("/community", { replace: true }), 200);
+    setTimeout(() => navigate("/community", { replace: true }), 300);
   };
+
+  useEffect(() => {
+    setViewContent({ ...inline });
+  }, [inline]);
+  console.log("viewContent: ", viewContent);
+
+  // useEffect(() => {
+  //   dispatch(communityActions.postCommunityWrite(viewContent));
+  // }, [dispatch, viewContent]);
 
   return (
     <>
@@ -59,8 +67,13 @@ function Community() {
         />
         <CKEditor
           editor={ClassicEditor}
-          config={{ placeholder: "내용을 입력하세요" }}
-          data="<p></p>"
+          config={{
+            placeholder: "내용을 입력하세요",
+            autoParagraph: false,
+            enterMode: 2,
+            ShiftEnterMode: 1,
+          }}
+          data=""
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!", editor);
@@ -81,11 +94,7 @@ function Community() {
           //   console.log("Focus.", editor);
           // }}
         />
-        <button
-          type="submit"
-          className="submit-button"
-          onClick={onSubmitHandler}
-        >
+        <button className="submit-button" onClick={onSubmitHandler}>
           등록
         </button>
       </div>

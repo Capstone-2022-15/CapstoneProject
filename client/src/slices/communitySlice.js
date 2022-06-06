@@ -57,18 +57,6 @@ const reducers = {
     state.statusText = action.payload?.statusText ?? "Network Error";
   },
 
-  // updateCommunity: (state, action) => {},
-  // updateCommunitySuccess: (state, action) => {
-  //   state.community = action.payload?.data ?? {};
-  //   state.status = action.payload?.status;
-  //   state.statusText = action.payload?.statusText ?? "Success";
-  // },
-  // updateCommunityFail: (state, action) => {
-  //   state.community = initialState.communityList;
-  //   state.status = action.payload?.status ?? 500;
-  //   state.statusText = action.payload?.statusText ?? "Network Error";
-  // },
-
   // updateCommunityViews: (state, action) => {},
   // updateCommunityViewsSuccess: (state, action) => {
   //   state.community = action.payload?.data ?? {};
@@ -82,29 +70,28 @@ const reducers = {
   // },
 
   // // 댓글
-  // getCommunityComments: (state, action) => {},
-  // getCommunityCommentsSuccess: (state, action) => {
-  //   state.communityComments = action.payload?.data ?? {};
-  //   state.status = action.payload?.status;
-  //   state.statusText = action.payload?.statusText ?? "Success";
-  // },
-  // getCommunityCommentsFail: (state, action) => {
-  //   state.communityComments = initialState.communityList;
-  //   state.status = action.payload?.status ?? 500;
-  //   state.statusText = action.payload?.statusText ?? "Network Error";
-  // },
+  getCommunityComments: (state, action) => {
+    state.communityComments = action.payload?.data ?? {};
+    state.status = action.payload?.status ?? 500;
+  },
+  getCommunityCommentsSuccess: (state, action) => {
+    state.communityComments = action.payload?.data ?? {};
+    state.status = action.payload?.status;
+  },
+  getCommunityCommentsFail: (state, action) => {
+    state.communityComments = initialState.communityComments;
+    state.status = action.payload?.status ?? 500;
+  },
 
-  // updateCommunityComments: (state, action) => {},
-  // updateCommunityCommentsSuccess: (state, action) => {
-  //   state.communityComments = action.payload?.data ?? {};
-  //   state.status = action.payload?.status;
-  //   state.statusText = action.payload?.statusText ?? "Success";
-  // },
-  // updateCommunityCommentsFail: (state, action) => {
-  //   state.communityComments = initialState.communityList;
-  //   state.status = action.payload?.status ?? 500;
-  //   state.statusText = action.payload?.statusText ?? "Network Error";
-  // },
+  postCommunityCommentsWrite: (state, action) => {},
+  postCommunityCommentsWriteSuccess: (state, action) => {
+    state.communityComments = action.payload?.data ?? {};
+    state.status = action.payload?.status;
+  },
+  postCommunityCommentsWriteFail: (state, action) => {
+    state.communityComments = initialState.communityList;
+    state.status = action.payload?.status ?? 500;
+  },
 };
 
 const communitySlice = createSlice({

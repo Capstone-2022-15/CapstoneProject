@@ -13,12 +13,22 @@ function apiPostToken(req) {
   });
 }
 
-function apiLogOut(req) {
+function apiLogOut() {
   return window.localStorage.removeItem("accessToken");
-  // return axios.post(`api/signout`, req).then((res) => {
-  //   window.localStorage.removeItem("accessToken");
-  // });
 }
+
+function apiPostSignUp(req) {
+  return axios.post(`api/signup`, req);
+}
+
+// function apiPostSignUpToken(req) {
+//   return axios.post(`api/signup`, req).then((res)=>{
+//     axios.get(`api/signup`, req)
+//     .then((res) => {
+//       return res.data;
+//     });
+//   });
+// }
 
 //-------------------------------------
 function* asyncPostSignIn(action) {
@@ -52,6 +62,20 @@ function* asyncLogOut() {
   }
 }
 
+function* asyncPostSignUp(action) {
+  try {
+    const response = yield call(apiPostSignUp, { ...action.payload });
+    if (response?.status === 200) {
+      yield put(signInActions.signUpSuccess(response));
+    } else {
+      yield put(signInActions.signUpFailure(response));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(signInActions.signUpFailure(e.response));
+  }
+}
+
 //----------------------------------------
 function* watchPostSignIn() {
   while (true) {
@@ -67,7 +91,14 @@ function* watchLogOut() {
   }
 }
 
+function* watchPostSignUp() {
+  while (true) {
+    const action = yield take(signInActions.signUpRequest);
+    yield call(asyncPostSignUp, action);
+  }
+}
+
 //-------------------------------------------
 export default function* communitySaga() {
-  yield all([fork(watchPostSignIn), fork(watchLogOut)]);
+  yield all([fork(watchPostSignIn), fork(watchLogOut), fork(watchPostSignUp)]);
 }

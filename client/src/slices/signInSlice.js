@@ -18,6 +18,13 @@ const initialState = {
     message: "",
     token: "",
   },
+  signUp: {
+    id: "", // 아이디
+    password: "", // 비밀번호
+    name: "", // 이름
+    nick: "", // 닉네임
+    gender: "", // 성별, INTEGER NOT STRING 남자: 0, 여자는: 1
+  },
 };
 
 const reducers = {
@@ -49,10 +56,15 @@ const reducers = {
   }),
   logOutSuccess: (state, action) => ({
     ...state,
+    initialState,
   }),
   logOutFailure: (state, action) => ({
     ...state,
   }),
+
+  signUpRequest: (state, action) => ({ ...state }),
+  signUpSuccess: (state, action) => ({ ...state }),
+  signUpFailure: (state, action) => ({ ...state }),
 };
 
 const signInSlice = createSlice({

@@ -18,7 +18,10 @@ import { communityActions } from "../slices/communitySlice";
 const SECOND = 1000;
 const token = window.localStorage.getItem("accessToken");
 
+// `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`
+
 //----------------------------------------------------------
+// 커뮤니티 첫 화면
 function apiGetCommunityAccess() {
   // 이걸로 표를 출력, 재발급하면 표 대신 토큰을 뱉는 이유?
   const access = axios.get(`api/community`, {
@@ -28,7 +31,6 @@ function apiGetCommunityAccess() {
   });
   return access;
 }
-
 function apiGetCommunity() {
   axios
     .get(`api/community`, {
@@ -41,33 +43,38 @@ function apiGetCommunity() {
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
         apiGetCommunityAccess();
+        // axios
+        //   .get(`api/community`, {
+        //     headers: {
+        //       Authorization: token,
+        //     },
+        //   })
+        //   .then((res1) => {
+        //     return res1.data;
+        //   });
       }
       console.log("res.data: ", res.data);
       return res.data;
     });
 }
 
+// 커뮤니티 세부
 function apiGetCommunityBoardAccess(params) {
-  const access = axios.get(
-    `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`,
-    {
-      headers: {
-        Authorization: token,
-      },
-    }
-  );
+  const access = axios.get(`api/community/${params}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
   return access;
 }
-
 function apiGetCommunityBoard(params) {
   axios
-    .get(`api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`, {
+    .get(`api/community/${params}`, {
       headers: {
         Authorization: token,
       },
     })
     .then((res) => {
-      console.log(res);
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
         apiGetCommunityBoardAccess(params);
@@ -76,60 +83,46 @@ function apiGetCommunityBoard(params) {
     });
 }
 
-// function apiGetCommunityCommentsAccess(params) {
-//   const access = axios.get(
-//     `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}/comments`,
-//     {
-//       headers: {
-//         Authorization: token,
-//       },
-//     }
-//   );
-//   return access;
-// }
-
-// function apiGetCommunityComments(params) {
-//   axios
-//     .get(
-//       `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}/comments`,
-//       {
-//         headers: {
-//           Authorization: token,
-//         },
-//       }
-//     )
-//     .then((res) => {
-//       console.log(res);
-//       if (res.data.token) {
-//         window.localStorage.setItem("accessToken", res.data.token);
-//         return axios.get(
-//           `api/community/${qs
-//             .stringify(params)
-//             .replace(/[^0-9]/g, "")}/comments`,
-//           {
-//             headers: {
-//               Authorization: token,
-//             },
-//           }
-//         );
-//       } else {
-//         return res.data;
-//       }
-//     });
-// }
-
-function apiPostCommunityWriteAccess(req) {
-  const access = axios.post(`api/community`, req, {
+// 커뮤니티 댓글 호출
+function apiGetCommunityCommentsAccess(params) {
+  const access = axios.get(`api/community/${params}/comments`, {
     headers: {
       Authorization: token,
     },
   });
   return access;
 }
+function apiGetCommunityComments(params) {
+  axios
+    .get(`api/community/${params}/comments`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        apiGetCommunityCommentsAccess(params);
+      }
+      return res.data;
+    });
+}
 
+// 글 작성
+function apiPostCommunityWriteAccess(req) {
+  const access = axios.post(`api/community`, req, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  console.log(access);
+  return access;
+}
 function apiPostCommunityWrite(req) {
   axios
-    .post(`api/community`, req, {
+    .post(`api/community`, {
+      data: req,
       headers: {
         Authorization: token,
       },
@@ -139,6 +132,7 @@ function apiPostCommunityWrite(req) {
         window.localStorage.setItem("accessToken", res.data.token);
         apiPostCommunityWriteAccess(req);
       }
+      console.log(res.data);
       return res.data;
     });
 }
@@ -149,9 +143,11 @@ function* asyncGetCommunity() {
     const response = yield call(apiGetCommunityAccess);
     const response1 = yield call(apiGetCommunity);
     console.log("response: ", response);
+    console.log("response?.status: ", response?.status);
     if (response?.status === 200) {
       yield put(communityActions.getCommunitySuccess(response));
-      if (response.data.token) window.location.reload(true); // 토큰 발생 시 서버에서 새로고침
+      if (response.data.token)
+        setTimeout(() => window.location.reload(true), 800); // 토큰 발생 시 서버에서 새로고침
     } else {
       yield put(communityActions.getCommunityFail(response));
     }
@@ -169,7 +165,8 @@ function* asyncGetCommunityBoard(action) {
     console.log("response: ", response);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityBoardSuccess(response));
-      if (response.data.token) window.location.reload(true);
+      if (response.data.token)
+        setTimeout(() => window.location.reload(true), 800);
     } else {
       yield put(communityActions.getCommunityBoardFail(response));
     }
@@ -179,20 +176,40 @@ function* asyncGetCommunityBoard(action) {
   }
 }
 
+function* asyncGetCommunityComments(action) {
+  try {
+    const response = yield call(
+      apiGetCommunityCommentsAccess,
+      action.payload.id
+    );
+    const response1 = yield call(apiGetCommunityComments, action.payload.id);
+    if (response?.status === 200) {
+      yield put(communityActions.getCommunityCommentsSuccess(response));
+    } else {
+      yield put(communityActions.getCommunityCommentsFail(response));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(communityActions.getCommunityCommentsFail(e.response));
+  }
+}
+
 function* asyncPostCommunityWrite(action) {
   try {
     const response = yield call(apiPostCommunityWriteAccess, {
       ...action.payload,
     });
     const response1 = yield call(apiPostCommunityWrite, { ...action.payload });
-    console.log("action.payload: ", action.payload);
-    if (response?.status === 201) {
+    console.log("response: ", response);
+    if (response?.status === 200) {
       yield put(communityActions.postCommunityWriteSuccess(response));
     } else {
+      console.log("A");
       yield put(communityActions.postCommunityWriteFailure(response));
       yield alert(`등록 실패: ${response?.status}, ${response?.statusText}`);
     }
   } catch (e) {
+    console.log("B");
     console.error(e);
     yield put(communityActions.postCommunityWriteFailure(e.response));
     yield alert(
@@ -216,26 +233,12 @@ function* watchGetCommunityBoard() {
   }
 }
 
-// function* asyncGetCommunityComments() {
-//   try {
-//     const response = yield call(apiGetCommunityComments);
-//     if (response?.status === 200) {
-//       yield put(communityActions.getCommunityListSuccess(response));
-//     } else {
-//       yield put(communityActions.getCommunityListFail(response));
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     yield put(communityActions.getCommunityListFail(e.response));
-//   }
-// }
-
-// function* watchGetCommunityComments() {
-//   while (true) {
-//     yield take(communityActions.getCommunityList);
-//     yield call(asyncGetCommunityComments);
-//   }
-// }
+function* watchGetCommunityComments() {
+  while (true) {
+    const action = yield take(communityActions.getCommunityComments);
+    yield call(asyncGetCommunityComments, action);
+  }
+}
 
 function* watchPostCommunityWrite() {
   while (true) {
@@ -249,7 +252,7 @@ export default function* communitySaga() {
   yield all([
     fork(watchGetCommunity),
     fork(watchGetCommunityBoard),
-    // fork(watchUpdateCommunityViews),
+    fork(watchGetCommunityComments),
     fork(watchPostCommunityWrite),
   ]);
 }

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([[102],{6876:function(e,n,c){c.r(n);c(2791);var r=c(184);n.default=function(){return(0,r.jsx)("div",{children:"DegreeBoard"})}}}]);
+//# sourceMappingURL=102.ce36df9c.chunk.js.map

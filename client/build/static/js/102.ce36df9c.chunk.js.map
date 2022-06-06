@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/102.ce36df9c.chunk.js","mappings":"iIAMA,UAJA,WACE,OAAO","sources":["pages/DegreeBoard.js"],"sourcesContent":["import React from \"react\";\r\n\r\nfunction DegreeBoard() {\r\n  return <div>DegreeBoard</div>;\r\n}\r\n\r\nexport default DegreeBoard;\r\n"],"names":[],"sourceRoot":""}

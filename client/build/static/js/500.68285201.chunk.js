@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([[500],{1500:function(n,e,c){c.r(e);c(2791);var t=c(184);e.default=function(){return(0,t.jsx)("div",{children:"AnnouncementBoard"})}}}]);
+//# sourceMappingURL=500.68285201.chunk.js.map

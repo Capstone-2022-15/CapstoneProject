@@ -117,7 +117,7 @@ def main():
     else:
        print('사진 인식 실패')
 
-
+    
 if __name__ == "__main__":
     main()
 

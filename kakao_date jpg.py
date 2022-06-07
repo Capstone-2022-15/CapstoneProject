@@ -109,7 +109,9 @@ def main():
             cut_img = org_img[y:y+h, x:x+w]
             # 자른 이미지 출력
             cut_img
-
+            # 양 끝에 하이폰 있으면 제거
+            word = word.strip('-')
+            print(word)
     else:
        print('사진 인식 실패')
 

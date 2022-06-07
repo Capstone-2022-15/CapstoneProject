@@ -22,7 +22,7 @@ const reducers = {
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },
-  getCommunityFail: (state, action) => {
+  getCommunityFailure: (state, action) => {
     state.community = initialState.community;
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";
@@ -39,7 +39,7 @@ const reducers = {
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },
-  getCommunityBoardFail: (state, action) => {
+  getCommunityBoardFailure: (state, action) => {
     state.communityBoard = initialState.communityBoard;
     state.status = action.payload?.status ?? 500;
     state.statusText = action.payload?.statusText ?? "Network Error";
@@ -78,7 +78,7 @@ const reducers = {
     state.communityComments = action.payload?.data ?? {};
     state.status = action.payload?.status;
   },
-  getCommunityCommentsFail: (state, action) => {
+  getCommunityCommentsFailure: (state, action) => {
     state.communityComments = initialState.communityComments;
     state.status = action.payload?.status ?? 500;
   },
@@ -88,7 +88,7 @@ const reducers = {
     state.communityComments = action.payload?.data ?? {};
     state.status = action.payload?.status;
   },
-  postCommunityCommentsWriteFail: (state, action) => {
+  postCommunityCommentsWriteFailure: (state, action) => {
     state.communityComments = initialState.communityList;
     state.status = action.payload?.status ?? 500;
   },

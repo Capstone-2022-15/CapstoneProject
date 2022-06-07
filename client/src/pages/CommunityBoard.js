@@ -3,18 +3,20 @@
 // useLocation 폐기, 단독으로 받아 올 필요 있다
 
 // import axios from "axios";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+// import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
-import useDidMountEffect from "../components/useDidMountEffect";
+// import useDidMountEffect from "../components/useDidMountEffect";
 
 function CommunityBoard() {
   const params = useParams();
-  const { communityBoard, communityComments, status, statusText, param } =
-    useSelector((state) => state.communityReducer);
+  const { communityBoard, communityComments, status, statusText } = useSelector(
+    (state) => state.communityReducer
+  );
 
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -25,20 +27,20 @@ function CommunityBoard() {
     console.log(take);
   }, [dispatch, params]);
 
-  const [inline, setInline] = useState({
-    member_id: "admin", //작성자 아이디
-    member_nick: "aaa", //작성자 닉네임, null이어도 됨
-    content: null, //댓글 내용
-  });
-  const [viewContent, setViewContent] = useState(() => []); // 적힌 내용 저장
+  // const [inline, setInline] = useState({
+  //   member_id: "admin", //작성자 아이디
+  //   member_nick: "aaa", //작성자 닉네임, null이어도 됨
+  //   content: null, //댓글 내용
+  // });
+  // const [viewContent, setViewContent] = useState(() => []); // 적힌 내용 저장
 
-  const getValue = (e) => {
-    const { name, value } = e.target;
-    setInline({
-      ...inline,
-      [name]: value,
-    });
-  };
+  // const getValue = (e) => {
+  //   const { name, value } = e.target;
+  //   setInline({
+  //     ...inline,
+  //     [name]: value,
+  //   });
+  // };
 
   // const onSubmitHandler = () => {
   //   setViewContent(viewContent.concat({ ...inline }));

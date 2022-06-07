@@ -11,11 +11,9 @@
 // -> 근데 api 링크 형식 때문에 못 쓸거 같음
 
 import axios from "../utils/axios";
-import { all, call, fork, put, take, retry } from "redux-saga/effects";
-import qs from "query-string";
+import { all, call, fork, put, take } from "redux-saga/effects";
 import { communityActions } from "../slices/communitySlice";
 
-const SECOND = 1000;
 const token = window.localStorage.getItem("accessToken");
 
 // `api/community/${qs.stringify(params).replace(/[^0-9]/g, "")}`
@@ -141,7 +139,7 @@ function apiPostCommunityWrite(req) {
 function* asyncGetCommunity() {
   try {
     const response = yield call(apiGetCommunityAccess);
-    const response1 = yield call(apiGetCommunity);
+    yield call(apiGetCommunity);
     console.log("response: ", response);
     console.log("response?.status: ", response?.status);
     if (response?.status === 200) {
@@ -149,18 +147,18 @@ function* asyncGetCommunity() {
       if (response.data.token)
         setTimeout(() => window.location.reload(true), 800); // 토큰 발생 시 서버에서 새로고침
     } else {
-      yield put(communityActions.getCommunityFail(response));
+      yield put(communityActions.getCommunityFailure(response));
     }
   } catch (e) {
     console.error(e);
-    yield put(communityActions.getCommunityFail(e.response));
+    yield put(communityActions.getCommunityFailure(e.response));
   }
 }
 
 function* asyncGetCommunityBoard(action) {
   try {
     const response = yield call(apiGetCommunityBoardAccess, action.payload.id);
-    const response1 = yield call(apiGetCommunityBoard, action.payload.id);
+    yield call(apiGetCommunityBoard, action.payload.id);
     console.log("action.payload: ", action.payload);
     console.log("response: ", response);
     if (response?.status === 200) {
@@ -168,11 +166,11 @@ function* asyncGetCommunityBoard(action) {
       if (response.data.token)
         setTimeout(() => window.location.reload(true), 800);
     } else {
-      yield put(communityActions.getCommunityBoardFail(response));
+      yield put(communityActions.getCommunityBoardFailure(response));
     }
   } catch (e) {
     console.error(e);
-    yield put(communityActions.getCommunityBoardFail(e.response));
+    yield put(communityActions.getCommunityBoardFailure(e.response));
   }
 }
 
@@ -182,15 +180,15 @@ function* asyncGetCommunityComments(action) {
       apiGetCommunityCommentsAccess,
       action.payload.id
     );
-    const response1 = yield call(apiGetCommunityComments, action.payload.id);
+    yield call(apiGetCommunityComments, action.payload.id);
     if (response?.status === 200) {
       yield put(communityActions.getCommunityCommentsSuccess(response));
     } else {
-      yield put(communityActions.getCommunityCommentsFail(response));
+      yield put(communityActions.getCommunityCommentsFailure(response));
     }
   } catch (e) {
     console.error(e);
-    yield put(communityActions.getCommunityCommentsFail(e.response));
+    yield put(communityActions.getCommunityCommentsFailure(e.response));
   }
 }
 
@@ -199,7 +197,7 @@ function* asyncPostCommunityWrite(action) {
     const response = yield call(apiPostCommunityWriteAccess, {
       ...action.payload,
     });
-    const response1 = yield call(apiPostCommunityWrite, { ...action.payload });
+    yield call(apiPostCommunityWrite, { ...action.payload });
     console.log("response: ", response);
     if (response?.status === 200) {
       yield put(communityActions.postCommunityWriteSuccess(response));

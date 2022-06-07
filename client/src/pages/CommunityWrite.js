@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
-import useDidMountEffect from "../components/useDidMountEffect";
+// import useDidMountEffect from "../components/useDidMountEffect";
 import "../css/CKEditer.css";
 
 function Community() {

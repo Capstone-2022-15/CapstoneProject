@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { signInActions } from "../slices/signInSlice";
-import InputBox from "../components/InputBoxDom";
+// import InputBox from "../components/InputBoxDom";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Box from "@material-ui/core/Box";
+// import Typography from "@mui/material/Typography";
+// import Container from "@mui/material/Container";
+// import Box from "@material-ui/core/Box";
 
 function SignUp() {
   const navigate = useNavigate();

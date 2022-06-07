@@ -100,10 +100,7 @@ def main():
             cut_img2
             word = outputdata['result'][i]['recognition_words'][0]
             if re.search('\d', outputdata['result'][i + 1]['recognition_words'][0]) == None:
-              continue
-            # 추출된 isbn에서 알파벳이 포함 되어 있으면 제거
-            re_word = re.sub(r"[a-z]", "", outputdata['result'][i + 1]['recognition_words'][0])
-            word += " : " + re_word
+              continue 
           else :
             # 자른 이미지
             cut_img = org_img[y:y+h, x:x+w]

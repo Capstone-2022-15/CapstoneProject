@@ -1,39 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { announcementActions } from "../slices/announcementSlice";
 
 import Header from "../components/HeaderDom";
+import Notice from "../components/Notice";
 
 function Announcement() {
-  const { announcementList, status, statusText } = useSelector(
+  const { announcement, status, statusText } = useSelector(
     (state) => state.announcementReducer
   );
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(announcementActions.getAnnouncementList());
+  useLayoutEffect(() => {
+    dispatch(announcementActions.getAnnouncement());
   }, [dispatch]);
 
   return (
     <>
       <Header />
       <h1>공지사항</h1>
-      {/* 에러 분기 */}
       {status === 200 ? (
         <div>
           <ul>
-            {Object.keys(announcementList).length > 1 ? (
-              announcementList.data.map((board) => (
-                <li key={board.idx}>
-                  <Link to={{ pathname: `/announcement/${board.idx}` }}>
-                    <span>{board.subject}</span>
-                  </Link>
-                </li>
-              ))
-            ) : (
-              <div> 게시판이 없습니다. </div>
-            )}
+            <Notice outsideJson={announcement} />
           </ul>
         </div>
       ) : (
@@ -46,6 +36,7 @@ function Announcement() {
           </div>
         </div>
       )}
+      <Link to={{ pathname: `/announcement/write` }}>글쓰기</Link>
     </>
   );
 }

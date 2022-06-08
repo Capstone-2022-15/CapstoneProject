@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 import { scholarshipActions } from "../slices/scholarshipSlice";
 
 import Header from "../components/HeaderDom";
+import Notice from "../components/Notice";
 
 function Scholarship() {
-  const { scholarshipList, status, statusText } = useSelector(
+  const { scholarship, status, statusText } = useSelector(
     (state) => state.scholarshipReducer
   );
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(scholarshipActions.getScholarshipList());
+    dispatch(scholarshipActions.getScholarship());
   }, [dispatch]);
 
   return (
@@ -22,19 +23,7 @@ function Scholarship() {
       {/* 에러 분기 */}
       {status === 200 ? (
         <div>
-          <ul>
-            {Object.keys(scholarshipList).length > 1 ? (
-              scholarshipList.data.map((board) => (
-                <li key={board.idx}>
-                  <Link to={{ pathname: `/scholarship/${board.idx}` }}>
-                    <span>{board.subject}</span>
-                  </Link>
-                </li>
-              ))
-            ) : (
-              <div> 게시판이 없습니다. </div>
-            )}
-          </ul>
+          <Notice outsideJson={scholarship} />
         </div>
       ) : (
         <div>
@@ -46,6 +35,7 @@ function Scholarship() {
           </div>
         </div>
       )}
+      <Link to={{ pathname: `/scholarship/write` }}>글쓰기</Link>
     </>
   );
 }

@@ -9,12 +9,15 @@ import Calendar from './components/Calendar/Calendar.js';
 import Scholarship from './components/Scholarship/Scholarship.js';
 import Community from './components/Community/Community.js';
 import Home from './components/Home.js';
-import FullCalendar from './components/FullCalendar.js';
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import  MuiPicker  from './components/MuiPicker.js';
+    
 function App(){
     return(
-        
+                 
         <div>
+            <MuiPicker/>
             {/* <BrowserRouter>
 
             <Routes>
@@ -31,13 +34,12 @@ function App(){
                     <Route path="/TopNav/Scholarship" element={<Scholarship/>}></Route>
                     <Route path="/TopNav/Community" element={<Community/>}></Route>
                 </Routes>
-          </BrowserRouter>         */}
-
-          {/* FullCalendar 구현 */}
-          <BrowserRouter>
-              <TopNav/>
-                <FullCalendar/>
-        </BrowserRouter>
+          </BrowserRouter>          */}
+  
+        {/* //    <BrowserRouter>
+        //       <TopNav/>
+        //         <FullCalendar/>
+        // </BrowserRouter>  */} 
         </div>
     );
 }

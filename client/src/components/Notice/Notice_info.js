@@ -1,9 +1,7 @@
-import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, TextField } from '@material-ui/core';
 import React from 'react';
 import qs from 'qs';
 import { useLocation } from "react-router-dom";
-
-
 
 const Notice_info = () => {
     const noticeData = require('./NoticeData.json');
@@ -12,9 +10,11 @@ const Notice_info = () => {
         ignoreQueryPrefix: true
       });
       const page = query.page
+
+   
         return(
         <div>
-            <TableContainer component ={Paper} elevation={3}  style={{width: 800, margin: '60px auto', height: 800}}>
+            <TableContainer component ={Paper} elevation={3}  style={{width: 1050, margin: '60px auto', height: 1200}}>
                 <div id="wrapper">
                 <Table  aria-label="customzied-table" >
                     <TableRow>
@@ -29,19 +29,18 @@ const Notice_info = () => {
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell component = "th" align='center' style={{backgroundColor:'#3f51b5', color:'white', fontSize:20, width: 100}}>
+                        <TableCell component = "th" align='center' style={{backgroundColor:'#3f51b5', color:'white', fontSize:20, width: 100}}
+                       >
                             작성자
                         </TableCell>
                         <TableCell align="center" style={{fontSize:18}}>{noticeData.noticeData[page].writer}</TableCell>
-                    </TableRow>
-                    <TableRow>
                         <TableCell
                         component = "th" align='center' style={{backgroundColor:'#3f51b5', color:'white', fontSize:20, width: 100}}>
                             날짜
                         </TableCell>
                         <TableCell align="center" style={{fontSize:18}}>{noticeData.noticeData[page].date}</TableCell>
                     </TableRow>
-
+                    
                 </Table>
                 </div>
 

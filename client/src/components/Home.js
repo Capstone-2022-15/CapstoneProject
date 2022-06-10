@@ -8,30 +8,32 @@ import { useLocation } from "react-router-dom";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SchoolIcon from '@mui/icons-material/School';
-
+import './Home.css';
 
 const Home = () => {
 
     const GotoNotice = () =>{
         const location =useLocation();
         console.log(location);
-        console.log('시발 된다!!');
     }
     
     return(
-        <div>
-            <Box style={{marginLeft:"560px", marginTop:"150px"}}>
+        <div id ="wrap">
+            <Box>
             <Stack spacing={1}>
-            <h1 style={{color:"#3f51b5", marginBottom:"30px" ,marginLeft:"40px"}}><b>제주대학교 학과 게시판</b></h1>
+            <div>
+                <img src="image/Jeju.jpg" style={{width:'400px', marginLeft:"50px", marginBottom:"30px"}}/>
+            </div>
+            {/* <h1 style={{color:"#3f51b5", marginBottom:"30px" ,marginLeft:"50px", fontSize:"40=px"}}><b>제주대학교 학과 게시판</b></h1> */}
 
                 <Stack direction="row" spacing={1}>
                     <Button 
                     style={{
                         backgroundColor: "#3f51b5",
                         color:"#fff	",
-                        fontSize: "25px",
-                        width: '200px', 
-                        height: '200px'
+                        fontSize: "30px",
+                        width: '250px', 
+                        height: '250px'
                         }}
                     varint = "contained"
                     href="/TopNav/Notice">
@@ -44,9 +46,9 @@ const Home = () => {
                     style={{
                         backgroundColor: "#3f51b5",
                         color:"#fff	",
-                        fontSize: "25px",
-                        width: '200px', 
-                        height: '200px'
+                        fontSize: "30px",
+                        width: '250px', 
+                        height: '250px'
                         }}
                     varint = "contained"
                     href="/TopNav/Schedule">
@@ -60,9 +62,9 @@ const Home = () => {
                     <Button  style={{
                         backgroundColor: "#3f51b5",
                         color:"#fff	",
-                        fontSize: "25px",
-                        width: '200px', 
-                        height: '200px'
+                        fontSize: "30px",
+                        width: '250px', 
+                        height: '250px'
                         }}
                     varint = "contained"
                     href="/TopNav/Scholarship">
@@ -74,9 +76,9 @@ const Home = () => {
                     <Button style={{
                         backgroundColor: "#3f51b5",
                         color:"#fff	",
-                        fontSize: "25px",
-                        width: '200px', 
-                        height: '200px'
+                        fontSize: "30px",
+                        width: '250px', 
+                        height: '250px'
                         }}
                     varint = "contained"
                     href="/TopNav/Community"

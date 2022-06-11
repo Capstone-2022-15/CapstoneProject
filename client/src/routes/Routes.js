@@ -16,7 +16,7 @@ function RoutesApp() {
   const AnnouncementBoard = lazy(() => import("../pages/AnnouncementBoard"));
   const AnnouncementWrite = lazy(() => import("../pages/AnnouncementWrite"));
 
-  // const Degree = lazy(() => import("../pages/Degree"));
+  const Degree = lazy(() => import("../pages/Degree"));
   // const DegreeBoard = lazy(() => import("../pages/DegreeBoard"));
 
   const Scholarship = lazy(() => import("../pages/Scholarship"));
@@ -50,10 +50,9 @@ function RoutesApp() {
             <Route path="/announcement/:id" element={<AnnouncementBoard />} />
             <Route path="/announcement/write" element={<AnnouncementWrite />} />
 
-            {/* 학사정보 */}
-            {/* <Route path="/degree" element={<Degree />} />
-            <Route path="/degree/:id" element={<DegreeBoard />} /> */}
-            <Route path="/degree" element={<Main />} />
+            {/* 학사일정 */}
+            <Route path="/degree" element={<Degree />} />
+            {/* <Route path="/degree/:id" element={<DegreeBoard />} /> */}
 
             {/* 장학정보 */}
             <Route path="/scholarship" element={<Scholarship />} />

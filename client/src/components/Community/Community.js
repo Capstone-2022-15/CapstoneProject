@@ -27,7 +27,7 @@ export const Community =() =>{
           컴퓨터공학과
         </div>
             
-          <Table aria-label='simple table'style={{textalign:'center'}} >
+        <Table aria-label='simple table'style={{textalign:'center', outline:'none', textShadow:'0 0 0 black', color:'transparent'}} >              
               <TableHead>
                   <TableRow>
                       <TableCell align="center">번호</TableCell>

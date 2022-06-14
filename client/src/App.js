@@ -17,8 +17,7 @@ function App(){
     return(
                  
         <div>
-            <MuiPicker/>
-            {/* <BrowserRouter>
+            <BrowserRouter>
 
             <Routes>
                     <Route path="/TopNav/*" element={<TopNav/>}></Route>
@@ -34,7 +33,7 @@ function App(){
                     <Route path="/TopNav/Scholarship" element={<Scholarship/>}></Route>
                     <Route path="/TopNav/Community" element={<Community/>}></Route>
                 </Routes>
-          </BrowserRouter>          */}
+          </BrowserRouter>         
   
         {/* //    <BrowserRouter>
         //       <TopNav/>

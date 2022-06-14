@@ -10,75 +10,95 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import React from "react";
 import Box from "@mui/material/Box"
-import { Button } from "@material-ui/core";
+import { Button, fade } from "@material-ui/core";
 import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from '@material-ui/icons/Search';
 import { styled, alpha } from '@mui/material/styles';
+import { List } from "@mui/material";
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.primary.dark, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.primary.dark, 0.25),
+  },
+  marginLeft: 0,
+  width: '70%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: '80%',
+    width: '18%',
+    textalign: 'center'
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    marginLeft: '50px',
+    marginBottom: '5px',
+    [theme.breakpoints.up('md')]: {
+      width: '100px',
+      textalign:'center'
+    },
+  },
+}))
 
 export const Notice =() =>{
   const [page, setPage] = React.useState(1);
     const handleChange = (event, value) => {
       setPage(value);
     };
-    
+  
   const noticeData = require('./NoticeData.json');
+ 
+ let  k =  noticeData.noticeData.filter((i)=> i.title.includes('2021'))
 
-  const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.primary.dark, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.primary.dark, 0.25),
-    },
-    marginLeft: 0,
-    width: '70%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: '80%',
-      width: '18%',
-    },
-  }));
+  const onChangeSearch = (e) => {
+    console.log('안녕하세요')
+  }
+  // handleValueChange = (e) => {
+  //   let nextState = {};
+  //   nextState[e.target.name] = e.target.value;
+  //   this.setState(nextState);
+  // }
 
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
-  }))
     return (
       <div style={{maxWidth: "1500px", margin:"2rem auto", marginTop:"60px"}}>
       <TableContainer component={Paper}>
         <div style={{fontSize:'2rem', marginTop:"40px", fontWeight:"bold", color:"#3f51b5", marginLeft:"550px"}}>
           컴퓨터공학과
           공지사항
-        <Search >
-          <SearchIconWrapper>
-            <SearchIcon/>
+        <Search>
+          <SearchIconWrapper onClick={onChangeSearch}>
+            <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
               placeholder="검색어"
               inputProps={{ 'aria-label': 'search' }}
+              name ="searchKeyword"
+              
+              // value ={this.state.searchKeyword}
             />
+            
         </Search>
         </div>
 
-          <Table aria-label='simple table'style={{textalign:'center'}} >
+          <Table aria-label='simple table'style={{textalign:'center', outline:'none', textShadow:'0 0 0 black', color:'transparent'}} >
               <TableHead>
                   <TableRow>
                       <TableCell align="center">번호</TableCell>

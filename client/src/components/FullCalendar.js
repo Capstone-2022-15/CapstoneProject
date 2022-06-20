@@ -1,14 +1,11 @@
-import React from "react";
-// import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { calendarActions } from "../slices/calendarSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { calendarActions } from "../slices/calendarSlice";
 
-import FullCalendar from "@fullcalendar/react"; // must go before plugins
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-// import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-// import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+
 import styled from "styled-components";
-
 const StyledDiv = styled.div`
   position: absolute;
   left: 50%;
@@ -17,23 +14,23 @@ const StyledDiv = styled.div`
 `;
 
 function MyCalendar() {
-  // const { calendar } = useSelector((state) => state.calendarReducer);
+  const { calendar } = useSelector((state) => state.calendarReducer);
 
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(calendarActions.getCalendar());
-  // }, [dispatch]);
+  if (calendar.data !== undefined) {
+    var newArray = calendar.data.map(function (cal) {
+      const newObj = {};
+      newObj["title"] = cal.subject;
+      newObj["start"] = cal.startDate.replace("T00:00:00.000Z", "");
+      newObj["end"] = cal.finalDate.replace("T00:00:00.000Z", "");
+      return newObj;
+    });
+  }
+  console.log(newArray);
 
-  // const [viewContent, setViewContent] = useState([]); // 적힌 내용 저장
-
-  // console.log(calendar);
-
-  // const newArray = calendar.data.map((board) => ({
-  //   title: board.subject,
-  //   start: board.startDate,
-  //   end: board.finalDate,
-  // }));
-  // setViewContent(...newArray);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(calendarActions.getCalendar());
+  }, [dispatch]);
 
   return (
     <StyledDiv
@@ -48,11 +45,12 @@ function MyCalendar() {
         droppable={true}
         defaultView="dayGridMonth"
         plugins={[dayGridPlugin]}
-        events={[
-          { title: "캡스톤 발표", date: "2022-06-08" },
-          { title: "기말고사", start: "2022-06-15", end: "2022-06-22" },
-          { title: "캡스톤 마무리 발표", date: "2022-06-23" },
-        ]}
+        // events={[
+        //   { title: "캡스톤 발표", start: "2022-06-08", end: "2022-06-10" },
+        //   { title: "기말고사", start: "2022-06-15", end: "2022-06-22" },
+        //   { title: "캡스톤 마무리 발표", date: "2022-06-23" },
+        // ]}
+        events={newArray}
         eventLimit={true}
         dayMaxEvents={3}
       />

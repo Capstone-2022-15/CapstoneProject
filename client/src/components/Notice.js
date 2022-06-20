@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import TableRow from "@material-ui/core/TableRow";
@@ -7,16 +6,13 @@ import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-// import { withStyles } from "@material-ui/styles";
 import Paper from "@material-ui/core/Paper";
 import TableContainer from "@material-ui/core/TableContainer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-// import { Typography } from "@material-ui/core";
-// import { object } from "prop-types";
 
 // 파라미터 추가시키기
-export const Notice = ({ outsideJson }) => {
+export const Notice = ({ outsideJson, name }) => {
   const [page, setPage] = useState(1);
   const handleChange = (event, value) => {
     setPage(value);
@@ -24,10 +20,12 @@ export const Notice = ({ outsideJson }) => {
 
   const [noticeData, setNoticeData] = useState({ data: {}, status: 0 });
   useEffect(() => {
-    setTimeout(() => setNoticeData(outsideJson), 200);
+    let timer = setTimeout(() => setNoticeData(outsideJson), 200);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [outsideJson]);
   console.log("noticeData: ", noticeData);
-  // console.log(noticeData.data.length);
 
   return (
     <div>
@@ -42,7 +40,7 @@ export const Notice = ({ outsideJson }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {noticeData.data.length > 1 ? (
+            {noticeData.data.length >= 1 ? (
               noticeData &&
               noticeData.data.map(
                 (board, index) =>
@@ -53,7 +51,7 @@ export const Notice = ({ outsideJson }) => {
                       <TableCell>
                         <Link
                           to={{
-                            pathname: `/community/${board.idx}`,
+                            pathname: `/${name}/${board.idx}`,
                           }}
                         >
                           {board.subject}

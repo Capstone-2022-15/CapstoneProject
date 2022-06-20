@@ -8,8 +8,7 @@ import Box from "@material-ui/core/Box";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-// import Button from "@material-ui/core/Button";
-// import { withStyles } from "@material-ui/styles";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import styled from "styled-components";
 import "../css/HeaderDom.module.css";
@@ -25,33 +24,8 @@ import "../css/HeaderDom.module.css";
 // });
 
 function HeaderDom() {
-  // const [anchorElNav, setAnchorElNav] = useState(null);
-  // const [anchorElUser, setAnchorElUser] = useState(null);
-
-  // const handleOpenNavMenu = (event) => {
-  //   setAnchorElNav(event.currentTarget);
-  // };
-
-  // const handleOpenUserMenu = (event) => {
-  //   setAnchorElUser(event.currentTarget);
-  // };
-
-  // const handleCloseNavMenu = () => {
-  //   setAnchorElUser(null);
-  // };
-
-  // const handleCloseUserMenu = () => {
-  //   setAnchorElUser(null);
-  // };
-
-  // const openCalendar = () => {
-  //   document.getElementById("tx").textContent = "학사일정";
-  // };
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // let body = { accessToken: window.localStorage.accessToken };
 
   function logOut() {
     setTimeout(() => navigate("/", { replace: true }), 100);
@@ -81,8 +55,7 @@ function HeaderDom() {
                   backgroundColor: "#3f51b5",
                   fontSize: "18px",
                 }}
-                varint="contained"
-                // onClick={handleCloseNavMenu}
+                variant="contained"
               >
                 공지사항
               </StyledLink>
@@ -92,8 +65,7 @@ function HeaderDom() {
                   backgroundColor: "#3f51b5",
                   fontSize: "18px",
                 }}
-                varint="contained"
-                // onClick={openCalendar}
+                variant="contained"
               >
                 학사일정
               </StyledLink>
@@ -103,10 +75,9 @@ function HeaderDom() {
                   backgroundColor: "#3f51b5",
                   fontSize: "18px",
                 }}
-                varint="contained"
-                // onClick={handleCloseNavMenu}
+                variant="contained"
               >
-                장학정보
+                학사정보
               </StyledLink>
               <StyledLink
                 to={`/community`}
@@ -114,42 +85,18 @@ function HeaderDom() {
                   backgroundColor: "#3f51b5",
                   fontSize: "18px",
                 }}
-                varint="contained"
-                // onClick={handleCloseNavMenu}
+                variant="contained"
               >
                 커뮤니티
               </StyledLink>
-              <button onClick={logOut}>로그아웃</button>
+              <StyledButton onClick={logOut}>
+                <LogoutIcon />
+              </StyledButton>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-      <div>{/* <Notice/> */}</div>
     </div>
-    // <div className="header">
-    //   <nav>
-    //     <ul>
-    //       <li>
-    //         <StyledLink to={`/main`}>제목</StyledLink>
-    //       </li>
-    //       <li>
-    //         <StyledLink to={`/announcement`}>공지사항</StyledLink>
-    //       </li>
-    //       <li>
-    //         <StyledLink to={`/degree`}>학사정보</StyledLink>
-    //       </li>
-    //       <li>
-    //         <StyledLink to={`/scholarship`}>장학정보</StyledLink>
-    //       </li>
-    //       <li>
-    //         <StyledLink to={`/community`}>커뮤니티</StyledLink>
-    //       </li>
-    //       <li>
-    //         <StyledLink to={`/profile`}>내 정보</StyledLink>
-    //       </li>
-    //     </ul>
-    //   </nav>
-    // </div>
   );
 }
 
@@ -161,12 +108,21 @@ const StyledLink = styled(Link)`
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  /* backgroundcolor: #3f51b5; */
   color: #fff;
-  /* fontsize: 18px; */
-  /* text-align: center; */
   padding: 10px 33px;
   text-decoration-line: none;
+  &:hover {
+    color: #000000;
+    font-weight: normal;
+  }
+`;
+
+const StyledButton = styled.button`
+  text-decoration-line: none;
+  background: #3f51b5;
+  color: #fff;
+  border: 0;
+  outline: 0;
   &:hover {
     color: #000000;
     font-weight: normal;

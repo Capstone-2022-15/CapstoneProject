@@ -11,7 +11,6 @@ function apiGetCalendarAccess() {
       Authorization: token,
     },
   });
-  console.log(access);
   return access;
 }
 function apiGetCalendar() {
@@ -26,7 +25,6 @@ function apiGetCalendar() {
         window.localStorage.setItem("accessToken", res.data.token);
         apiGetCalendarAccess();
       }
-      console.log(res.data);
       return res.data;
     });
 }
@@ -36,9 +34,11 @@ function* asyncGetCalendar() {
   try {
     const response = yield call(apiGetCalendarAccess);
     yield call(apiGetCalendar);
-    console.log("response: ", response);
+    // console.log("response: ", response);
     if (response?.status === 200) {
       yield put(calendarActions.getCalendarSuccess(response));
+      if (response.data.token)
+        setTimeout(() => window.location.reload(true), 800);
     } else {
       yield put(calendarActions.getCalendarFailure(response));
     }

@@ -10,9 +10,6 @@ function Community() {
   const { community, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
-  console.log("community: ", community);
-  console.log("status: ", status);
-  console.log("statusText: ", statusText);
 
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -25,7 +22,7 @@ function Community() {
       <h1>커뮤니티</h1>
       {status === 200 ? (
         <div>
-          <Notice outsideJson={community} />
+          <Notice outsideJson={community} name={"community"} />
           {/* <ul>
             {Object.keys(communityList).length > 1 ? (
               communityList &&

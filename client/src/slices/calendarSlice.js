@@ -10,11 +10,11 @@ const initialState = {
 
 const reducers = {
   getCalendar: (state, action) => {
-    state.calendar = action.payload?.data;
+    state.calendar = action.payload?.data ?? [];
     state.status = action.payload?.status ?? 500;
   },
   getCalendarSuccess: (state, action) => {
-    state.calendar = action.payload?.data;
+    state.calendar = action.payload?.data ?? [];
     state.status = action.payload?.status;
     state.statusText = action.payload?.statusText ?? "Success";
   },

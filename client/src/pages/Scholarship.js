@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { scholarshipActions } from "../slices/scholarshipSlice";
@@ -12,7 +12,7 @@ function Scholarship() {
   );
 
   const dispatch = useDispatch();
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(scholarshipActions.getScholarship());
   }, [dispatch]);
 
@@ -20,10 +20,9 @@ function Scholarship() {
     <>
       <Header />
       <h1>학사정보</h1>
-      {/* 에러 분기 */}
       {status === 200 ? (
         <div>
-          <Notice outsideJson={scholarship} />
+          <Notice outsideJson={scholarship} name={"scholarship"} />
         </div>
       ) : (
         <div>

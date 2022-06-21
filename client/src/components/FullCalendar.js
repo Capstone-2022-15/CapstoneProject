@@ -25,7 +25,6 @@ function MyCalendar() {
       return newObj;
     });
   }
-  console.log(newArray);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -33,10 +32,7 @@ function MyCalendar() {
   }, [dispatch]);
 
   return (
-    <StyledDiv
-      className="App"
-      // style={{ width: "70%", display: flex, justify-content: center, marginTop: "50px" }}
-    >
+    <StyledDiv className="App">
       <FullCalendar
         locale={"ko"}
         height={900}

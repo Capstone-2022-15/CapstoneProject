@@ -19,7 +19,6 @@ function ScholarshipBoard() {
     setTimeout(() => take, 100);
     const take1 = dispatch(scholarshipActions.getScholarshipComments(params));
     setTimeout(() => take1, 200);
-    console.log(take);
   }, [dispatch, params]);
 
   const onDeleteHandler = () => {

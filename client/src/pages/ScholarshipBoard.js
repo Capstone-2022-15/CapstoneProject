@@ -1,17 +1,19 @@
 import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { scholarshipActions } from "../slices/scholarshipSlice";
 
 import Header from "../components/HeaderDom";
-// import useDidMountEffect from "../components/useDidMountEffect";
 
 function ScholarshipBoard() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const params = useParams();
+
   const { scholarshipBoard, scholarshipComments, status, statusText } =
     useSelector((state) => state.scholarshipReducer);
 
-  const dispatch = useDispatch();
   useLayoutEffect(() => {
     const take = dispatch(scholarshipActions.getScholarshipBoard(params));
     setTimeout(() => take, 100);
@@ -19,6 +21,17 @@ function ScholarshipBoard() {
     setTimeout(() => take1, 200);
     console.log(take);
   }, [dispatch, params]);
+
+  const onDeleteHandler = () => {
+    dispatch(scholarshipActions.deleteScholarship(params));
+    setTimeout(() => navigate("/scholarship", { replace: true }), 300);
+  };
+
+  const onConfirmDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      return onDeleteHandler();
+    }
+  };
 
   // const [inline, setInline] = useState({
   //   member_id: "admin", //작성자 아이디
@@ -48,13 +61,17 @@ function ScholarshipBoard() {
   return (
     <>
       <Header />
-      <h1>커뮤니티</h1>
+      <h1>학사정보</h1>
       {status === 200 && board !== undefined ? (
         <div>
           <div className="inBoard" key={board.idx}>
             <h2>{board.subject}</h2>
             <hr />
             <span>{board.content}</span>
+            <hr />
+            <button className="delete-button" onClick={onConfirmDelete}>
+              삭제
+            </button>
             <hr />
           </div>
           <div className="inComment">

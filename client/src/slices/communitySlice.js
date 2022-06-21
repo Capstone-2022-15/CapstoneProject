@@ -69,7 +69,7 @@ const reducers = {
   //   state.statusText = action.payload?.statusText ?? "Network Error";
   // },
 
-  // // 댓글
+  // 댓글
   getCommunityComments: (state, action) => {
     state.communityComments = action.payload?.data ?? {};
     state.status = action.payload?.status ?? 500;
@@ -90,6 +90,15 @@ const reducers = {
   },
   postCommunityCommentsWriteFailure: (state, action) => {
     state.communityComments = initialState.communityList;
+    state.status = action.payload?.status ?? 500;
+  },
+
+  // 글 삭제
+  deleteCommunity: (state, action) => {},
+  deleteCommunitySuccess: (state, action) => {
+    state.status = action.payload?.status;
+  },
+  deleteCommunityFailure: (state, action) => {
     state.status = action.payload?.status ?? 500;
   },
 };

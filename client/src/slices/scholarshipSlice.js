@@ -69,7 +69,7 @@ const reducers = {
   //   state.statusText = action.payload?.statusText ?? "Network Error";
   // },
 
-  // // 댓글
+  // 댓글 불러오기
   getScholarshipComments: (state, action) => {
     state.scholarshipComments = action.payload?.data ?? {};
     state.status = action.payload?.status ?? 500;
@@ -83,6 +83,7 @@ const reducers = {
     state.status = action.payload?.status ?? 500;
   },
 
+  // 글 쓰기
   postScholarshipCommentsWrite: (state, action) => {},
   postScholarshipCommentsWriteSuccess: (state, action) => {
     state.scholarshipComments = action.payload?.data ?? {};
@@ -90,6 +91,15 @@ const reducers = {
   },
   postScholarshipCommentsWriteFailure: (state, action) => {
     state.scholarshipComments = initialState.scholarshipList;
+    state.status = action.payload?.status ?? 500;
+  },
+
+  // 글 삭제
+  deleteScholarship: (state, action) => {},
+  deleteScholarshipSuccess: (state, action) => {
+    state.status = action.payload?.status;
+  },
+  deleteScholarshipFailure: (state, action) => {
     state.status = action.payload?.status ?? 500;
   },
 };

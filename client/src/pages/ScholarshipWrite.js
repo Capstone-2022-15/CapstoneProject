@@ -21,7 +21,7 @@ function Scholarship() {
   function processDate(day) {
     return `${day.getFullYear()}-${("0" + (day.getMonth() + 1)).slice(-2)}-${(
       "0" + day.getDate()
-    ).slice(-2)}T00:00:00.000Z`;
+    ).slice(-2)}`;
   }
 
   // 서버에 전달할 정보 (날짜 필수 작성)
@@ -35,7 +35,6 @@ function Scholarship() {
     password: null,
   });
   const [viewContent, setViewContent] = useState(() => []);
-  console.log(inline.startdate > inline.finaldate);
 
   // 내용 입력 후 변경
   const getValue = (e) => {

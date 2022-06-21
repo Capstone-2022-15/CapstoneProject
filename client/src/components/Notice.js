@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { Button } from "@material-ui/core";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
@@ -10,6 +11,9 @@ import Paper from "@material-ui/core/Paper";
 import TableContainer from "@material-ui/core/TableContainer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import { styled, alpha } from "@mui/material/styles";
 
 // 파라미터 추가시키기
 export const Notice = ({ outsideJson, name }) => {
@@ -30,13 +34,41 @@ export const Notice = ({ outsideJson, name }) => {
   return (
     <div>
       <TableContainer component={Paper}>
+        <Search
+          style={{
+            float: "right",
+          }}
+        >
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="검색어"
+            inputProps={{ "aria-label": "search" }}
+          />
+        </Search>
+        <Link to={{ pathname: `/search` }} style={{ textDecoration: "none" }}>
+          <Button
+            style={{
+              float: "right",
+              backgroundColor: "#3f51b5",
+              color: "#fff",
+              fontSize: "15px",
+              flexDirection: "row",
+            }}
+            variant="contained"
+          >
+            검색
+          </Button>
+        </Link>
+
         <Table aria-label="simple table" style={{ textalign: "center" }}>
           <TableHead>
             <TableRow>
-              <TableCell>번호</TableCell>
-              <TableCell>제목</TableCell>
-              <TableCell>작성자</TableCell>
-              <TableCell>작성일</TableCell>
+              <TableCell align="center">번호</TableCell>
+              <TableCell align="center">제목</TableCell>
+              <TableCell align="center">작성자</TableCell>
+              <TableCell align="center">작성일</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -47,18 +79,21 @@ export const Notice = ({ outsideJson, name }) => {
                   (page - 1) * 10 <= index &&
                   index < page * 10 && (
                     <TableRow key={board.idx}>
-                      <TableCell>{board.idx}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{board.idx}</TableCell>
+                      <TableCell align="center">
                         <Link
                           to={{
                             pathname: `/${name}/${board.idx}`,
                           }}
+                          style={{ textDecoration: "none" }}
                         >
                           {board.subject}
                         </Link>
                       </TableCell>
-                      <TableCell>{board.writer}</TableCell>
-                      <TableCell>{board.createDate}</TableCell>
+                      <TableCell align="center">{board.writer}</TableCell>
+                      <TableCell align="center">
+                        {board.createDate.slice(0, -14)}
+                      </TableCell>
                     </TableRow>
                   )
               )
@@ -70,8 +105,34 @@ export const Notice = ({ outsideJson, name }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Link
+        to={{ pathname: `/${name}/write` }}
+        style={{ textDecoration: "none" }}
+      >
+        <Button
+          style={{
+            backgroundColor: "#3f51b5",
+            color: "#fff	",
+            fontSize: "15px",
+            flexDirection: "row",
+            marginTop: "40px",
+            marginLeft: "10px",
+          }}
+          variant="contained"
+        >
+          글쓰기
+        </Button>
+      </Link>
+
       <div textalign="center">
-        <Stack spacing={2}>
+        <Stack
+          spacing={2}
+          style={{
+            marginTop: "40px",
+            marginLeft: "10px",
+          }}
+        >
           <Pagination
             count={10}
             page={page}
@@ -85,3 +146,41 @@ export const Notice = ({ outsideJson, name }) => {
 };
 
 export default Notice;
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.primary.dark, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.primary.dark, 0.25),
+  },
+  marginLeft: 0,
+  width: "70%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: "80%",
+    width: "18%",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
+}));

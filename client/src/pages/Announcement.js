@@ -1,6 +1,5 @@
 import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { announcementActions } from "../slices/announcementSlice";
 
 import Header from "../components/HeaderDom";
@@ -19,12 +18,20 @@ function Announcement() {
   return (
     <>
       <Header />
-      <h1>공지사항</h1>
+      <div
+        style={{
+          fontSize: "2rem",
+          marginTop: "40px",
+          marginLeft: "100px",
+          fontWeight: "bold",
+          color: "#3f51b5",
+        }}
+      >
+        공지사항
+      </div>
       {status === 200 ? (
         <div>
-          <ul>
-            <Notice outsideJson={announcement} />
-          </ul>
+          <Notice outsideJson={announcement} name={"announcement"} />
         </div>
       ) : (
         <div>
@@ -36,7 +43,6 @@ function Announcement() {
           </div>
         </div>
       )}
-      <Link to={{ pathname: `/announcement/write` }}>글쓰기</Link>
     </>
   );
 }

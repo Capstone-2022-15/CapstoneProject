@@ -135,6 +135,31 @@ function apiPostCommunityWrite(req) {
     });
 }
 
+// 글 삭제
+function apiDeleteCommunityAccess(params) {
+  const access = axios.delete(`api/community/${params}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return access;
+}
+function apiDeleteCommunity(params) {
+  axios
+    .delete(`api/community/${params}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        apiDeleteCommunityAccess(params);
+      }
+      return res.data;
+    });
+}
+
 //-------------------------------------------
 function* asyncGetCommunity() {
   try {
@@ -216,6 +241,21 @@ function* asyncPostCommunityWrite(action) {
   }
 }
 
+function* asyncDeleteCommunity(action) {
+  try {
+    const response = yield call(apiDeleteCommunityAccess, action.payload.id);
+    yield call(apiDeleteCommunity, action.payload.id);
+    if (response?.status === 200) {
+      yield put(communityActions.deleteCommunitySuccess(response));
+    } else {
+      yield put(communityActions.deleteCommunityFailure(response));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(communityActions.deleteCommunityFailure(e.response));
+  }
+}
+
 //---------------------------------------------------------------------
 function* watchGetCommunity() {
   while (true) {
@@ -245,6 +285,13 @@ function* watchPostCommunityWrite() {
   }
 }
 
+function* watchDeleteCommunity() {
+  while (true) {
+    const action = yield take(communityActions.deleteCommunity);
+    yield call(asyncDeleteCommunity, action);
+  }
+}
+
 //------------------------------------------------------
 export default function* communitySaga() {
   yield all([
@@ -252,5 +299,6 @@ export default function* communitySaga() {
     fork(watchGetCommunityBoard),
     fork(watchGetCommunityComments),
     fork(watchPostCommunityWrite),
+    fork(watchDeleteCommunity),
   ]);
 }

@@ -30,7 +30,7 @@ function apiGetScholarship() {
     });
 }
 
-// 세부
+// 클릭 시 세부 내용
 function apiGetScholarshipBoardAccess(params) {
   const access = axios.get(`api/scholarship/${params}`, {
     headers: {
@@ -87,7 +87,6 @@ function apiPostScholarshipWriteAccess(req) {
       Authorization: token,
     },
   });
-  console.log(access);
   return access;
 }
 function apiPostScholarshipWrite(req) {
@@ -102,6 +101,31 @@ function apiPostScholarshipWrite(req) {
       if (res.data.token) {
         window.localStorage.setItem("accessToken", res.data.token);
         apiPostScholarshipWriteAccess(req);
+      }
+      return res.data;
+    });
+}
+
+// 글 삭제
+function apiDeleteScholarshipAccess(params) {
+  const access = axios.delete(`api/scholarship/${params}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return access;
+}
+function apiDeleteScholarship(params) {
+  axios
+    .delete(`api/scholarship/${params}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      if (res.data.token) {
+        window.localStorage.setItem("accessToken", res.data.token);
+        apiDeleteScholarshipAccess(params);
       }
       return res.data;
     });
@@ -184,6 +208,21 @@ function* asyncPostScholarshipWrite(action) {
   }
 }
 
+function* asyncDeleteScholarship(action) {
+  try {
+    const response = yield call(apiDeleteScholarshipAccess, action.payload.id);
+    yield call(apiDeleteScholarship, action.payload.id);
+    if (response?.status === 200) {
+      yield put(scholarshipActions.deleteScholarshipSuccess(response));
+    } else {
+      yield put(scholarshipActions.deleteScholarshipFailure(response));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(scholarshipActions.deleteScholarshipFailure(e.response));
+  }
+}
+
 //---------------------------------
 function* watchGetScholarship() {
   while (true) {
@@ -213,6 +252,13 @@ function* watchPostScholarshipWrite() {
   }
 }
 
+function* watchDeleteScholarship() {
+  while (true) {
+    const action = yield take(scholarshipActions.deleteScholarship);
+    yield call(asyncDeleteScholarship, action);
+  }
+}
+
 //---------------------------------
 export default function* scholarshipSaga() {
   yield all([
@@ -220,5 +266,6 @@ export default function* scholarshipSaga() {
     fork(watchGetScholarshipBoard),
     fork(watchGetScholarshipComments),
     fork(watchPostScholarshipWrite),
+    fork(watchDeleteScholarship),
   ]);
 }

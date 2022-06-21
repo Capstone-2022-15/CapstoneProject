@@ -1,6 +1,5 @@
 import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { scholarshipActions } from "../slices/scholarshipSlice";
 
 import Header from "../components/HeaderDom";
@@ -19,7 +18,17 @@ function Scholarship() {
   return (
     <>
       <Header />
-      <h1>학사정보</h1>
+      <div
+        style={{
+          fontSize: "2rem",
+          marginTop: "40px",
+          marginLeft: "100px",
+          fontWeight: "bold",
+          color: "#3f51b5",
+        }}
+      >
+        학사정보
+      </div>
       {status === 200 ? (
         <div>
           <Notice outsideJson={scholarship} name={"scholarship"} />
@@ -34,7 +43,6 @@ function Scholarship() {
           </div>
         </div>
       )}
-      <Link to={{ pathname: `/scholarship/write` }}>글쓰기</Link>
     </>
   );
 }

@@ -7,6 +7,7 @@ import announcementSaga from "./sagas/announcementSaga";
 // import degreeSaga from "./sagas/degreeSaga";
 import scholarshipSaga from "./sagas/scholarshipSaga";
 import communitySaga from "./sagas/communitySaga";
+import searchSaga from "./sagas/searchSaga";
 
 let combineSagas = {};
 combineSagas = Object.assign(combineSagas, {
@@ -16,6 +17,7 @@ combineSagas = Object.assign(combineSagas, {
   scholarshipSaga,
   // degreeSaga,
   communitySaga,
+  searchSaga,
 });
 
 export default function* rootSaga() {

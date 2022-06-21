@@ -20,8 +20,8 @@ function MyCalendar() {
     var newArray = calendar.data.map(function (cal) {
       const newObj = {};
       newObj["title"] = cal.subject;
-      newObj["start"] = cal.startDate.replace("T00:00:00.000Z", "");
-      newObj["end"] = cal.finalDate.replace("T00:00:00.000Z", "");
+      newObj["start"] = cal.startDate.slice(0, -14);
+      newObj["end"] = cal.finalDate.slice(0, -14);
       return newObj;
     });
   }

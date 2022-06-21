@@ -18,6 +18,7 @@ import ScholarshipWrite from "../pages/ScholarshipWrite";
 import Community from "../pages/Community";
 import CommunityBoard from "../pages/CommunityBoard";
 import CommunityWrite from "../pages/CommunityWrite";
+import Search from "../pages/Search";
 import NotFound from "../pages/NotFound";
 
 function RoutesApp() {
@@ -79,6 +80,9 @@ function RoutesApp() {
           <Route path="/community" element={<Community />} />
           <Route path="/community/:id" element={<CommunityBoard />} />
           <Route path="/community/write" element={<CommunityWrite />} />
+
+          {/* 검색 */}
+          <Route path="/search" element={<Search />} />
 
           {/* 내 정보 */}
           <Route path="/profile" element={<Profile />} />

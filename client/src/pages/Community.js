@@ -1,6 +1,5 @@
 import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { communityActions } from "../slices/communitySlice";
 
 import Header from "../components/HeaderDom";
@@ -19,38 +18,20 @@ function Community() {
   return (
     <>
       <Header />
-      <h1>커뮤니티</h1>
+      <div
+        style={{
+          fontSize: "2rem",
+          marginTop: "40px",
+          marginLeft: "100px",
+          fontWeight: "bold",
+          color: "#3f51b5",
+        }}
+      >
+        커뮤니티
+      </div>
       {status === 200 ? (
         <div>
           <Notice outsideJson={community} name={"community"} />
-          {/* <ul>
-            {Object.keys(communityList).length > 1 ? (
-              communityList &&
-              communityList.data.map((board) => (
-                <li key={board.idx}>
-                  <Link
-                    to={{
-                      pathname: `/community/${board.idx}`,
-                    }}
-                    // state={{
-                    //   id: board.idx,
-                    //   subject: board.subject,
-                    //   content: board.content,
-                    //   writer: board.writer,
-                    //   createDate: board.createDate,
-                    //   updateDate: board.updateDate,
-                    //   hit: board.hit,
-                    // }}
-                  >
-                    <span>{board.subject}</span>
-                  </Link>
-                </li>
-              ))
-            ) : (
-              <div> 게시판이 없습니다. </div>
-            )}
-          </ul>
-          <Link to={{ pathname: `/community/write` }}>글쓰기</Link> */}
         </div>
       ) : (
         <div>
@@ -62,7 +43,6 @@ function Community() {
           </div>
         </div>
       )}
-      <Link to={{ pathname: `/community/write` }}>글쓰기</Link>
     </>
   );
 }

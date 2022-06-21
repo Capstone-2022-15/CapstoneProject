@@ -6,6 +6,7 @@
 // import React, { useEffect, useLayoutEffect, useState } from "react";
 import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { communityActions } from "../slices/communitySlice";
 
@@ -13,12 +14,14 @@ import Header from "../components/HeaderDom";
 // import useDidMountEffect from "../components/useDidMountEffect";
 
 function CommunityBoard() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const params = useParams();
+
   const { communityBoard, communityComments, status, statusText } = useSelector(
     (state) => state.communityReducer
   );
 
-  const dispatch = useDispatch();
   useLayoutEffect(() => {
     const take = dispatch(communityActions.getCommunityBoard(params));
     setTimeout(() => take, 100);
@@ -26,6 +29,17 @@ function CommunityBoard() {
     setTimeout(() => take1, 200);
     console.log(take);
   }, [dispatch, params]);
+
+  const onDeleteHandler = () => {
+    dispatch(communityActions.deleteCommunity(params));
+    setTimeout(() => navigate("/community", { replace: true }), 300);
+  };
+
+  const onConfirmDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      return onDeleteHandler();
+    }
+  };
 
   // const [inline, setInline] = useState({
   //   member_id: "admin", //작성자 아이디
@@ -62,6 +76,10 @@ function CommunityBoard() {
             <h2>{board.subject}</h2>
             <hr />
             <span>{board.content}</span>
+            <hr />
+            <button className="delete-button" onClick={onConfirmDelete}>
+              삭제
+            </button>
             <hr />
           </div>
           <div className="inComment">

@@ -50,16 +50,6 @@ function HeaderDom() {
               }}
             >
               <StyledLink
-                to={`/announcement`}
-                style={{
-                  backgroundColor: "#3f51b5",
-                  fontSize: "18px",
-                }}
-                variant="contained"
-              >
-                공지사항
-              </StyledLink>
-              <StyledLink
                 to={`/degree`}
                 style={{
                   backgroundColor: "#3f51b5",
@@ -68,6 +58,16 @@ function HeaderDom() {
                 variant="contained"
               >
                 학사일정
+              </StyledLink>
+              <StyledLink
+                to={`/announcement`}
+                style={{
+                  backgroundColor: "#3f51b5",
+                  fontSize: "18px",
+                }}
+                variant="contained"
+              >
+                공지사항
               </StyledLink>
               <StyledLink
                 to={`/scholarship`}
